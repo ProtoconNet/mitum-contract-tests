@@ -35,7 +35,9 @@ func (t *testMint) Test01ErrorCurrencyNotFound() {
 	err := t.Create().
 		SetCurrency("ABC", 10000, t.GenesisAddr, false).
 		SetAccount(t.receiverKey, 100, t.GenesisCurrency, t.Receiver(), true).
-		SetAmount(100, t.Currency()).RunPreProcess()
+		SetAmount(100, t.Currency()).
+		MakeOperation().
+		RunPreProcess()
 
 	if assert.NotNil(t.Suite.T(), err) {
 		t.Suite.T().Log(err.Error())
@@ -46,7 +48,9 @@ func (t *testMint) Test02ErrorReceiverNotExist() {
 	err := t.Create().
 		SetCurrency("ABC", 10000, t.GenesisAddr, true).
 		SetAccount(t.receiverKey, 100, t.GenesisCurrency, t.Receiver(), false).
-		SetAmount(100, t.Currency()).RunPreProcess()
+		SetAmount(100, t.Currency()).
+		MakeOperation().
+		RunPreProcess()
 
 	if assert.NotNil(t.Suite.T(), err) {
 		t.Suite.T().Log(err.Error())
@@ -58,7 +62,9 @@ func (t *testMint) Test03ErrorReceiverIsContract() {
 		SetCurrency("ABC", 10000, t.GenesisAddr, true).
 		SetAccount(t.receiverKey, 1000, t.GenesisCurrency, t.owner, true).
 		SetContractAccount(t.owner[0].Address(), t.contractKey, 1000, t.GenesisCurrency, t.Receiver(), true).
-		SetAmount(100, t.Currency()).RunPreProcess()
+		SetAmount(100, t.Currency()).
+		MakeOperation().
+		RunPreProcess()
 
 	if assert.NotNil(t.Suite.T(), err) {
 		t.Suite.T().Log(err.Error())

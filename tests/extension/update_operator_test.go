@@ -43,6 +43,7 @@ func (t *testUpdateOperator) Test01ErrorSenderNotFound() {
 		SetAccount(t.senderKey, 1000, t.GenesisCurrency, t.Sender(), false).
 		SetContractAccount(t.Sender()[0].Address(), t.contract1Key, 1000, t.GenesisCurrency, t.Contract(), true).
 		SetAccount(t.operatorKey, 1000, t.GenesisCurrency, t.Operators(), true).
+		MakeOperation().
 		RunPreProcess()
 
 	if assert.NotNil(t.Suite.T(), err) {
@@ -56,6 +57,7 @@ func (t *testUpdateOperator) Test02ErrorSenderIsContract() {
 		SetContractAccount(t.owner[0].Address(), t.contract1Key, 1000, t.GenesisCurrency, t.Sender(), true).
 		SetContractAccount(t.Sender()[0].Address(), t.contract2Key, 1000, t.GenesisCurrency, t.Contract(), true).
 		SetAccount(t.operatorKey, 1000, t.GenesisCurrency, t.Operators(), true).
+		MakeOperation().
 		RunPreProcess()
 
 	if assert.NotNil(t.Suite.T(), err) {
@@ -68,6 +70,7 @@ func (t *testUpdateOperator) Test03ErrorOperatorNotFound() {
 		SetAccount(t.senderKey, 1000, t.GenesisCurrency, t.Sender(), true).
 		SetContractAccount(t.Sender()[0].Address(), t.contract1Key, 1000, t.GenesisCurrency, t.Contract(), true).
 		SetAccount(t.operatorKey, 1000, t.GenesisCurrency, t.Operators(), false).
+		MakeOperation().
 		RunPreProcess()
 
 	if assert.NotNil(t.Suite.T(), err) {
@@ -80,6 +83,7 @@ func (t *testUpdateOperator) Test04ErrorOperatorIsContract() {
 		SetAccount(t.senderKey, 1000, t.GenesisCurrency, t.Sender(), true).
 		SetContractAccount(t.Sender()[0].Address(), t.contract1Key, 1000, t.GenesisCurrency, t.Contract(), true).
 		SetContractAccount(t.Sender()[0].Address(), t.contract2Key, 1000, t.GenesisCurrency, t.Operators(), true).
+		MakeOperation().
 		RunPreProcess()
 
 	if assert.NotNil(t.Suite.T(), err) {

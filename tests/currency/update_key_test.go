@@ -37,6 +37,7 @@ func (t *testUpdateKey) Test01ErrorSenderNotFound() {
 	err := t.Create().
 		SetAccount(t.senderKey, 1000, t.GenesisCurrency, t.Sender(), false).
 		SetAccount(t.targetKey, 100, t.GenesisCurrency, t.Target(), false).
+		MakeOperation().
 		RunPreProcess()
 
 	if assert.NotNil(t.Suite.T(), err) {
@@ -49,6 +50,7 @@ func (t *testUpdateKey) Test02ErrorSenderIsContract() {
 		SetAccount(t.senderKey, 1000, t.GenesisCurrency, t.owner, true).
 		SetContractAccount(t.owner[0].Address(), t.contractKey, 1000, t.GenesisCurrency, t.Sender(), true).
 		SetAccount(t.targetKey, 100, t.GenesisCurrency, t.Target(), false).
+		MakeOperation().
 		RunPreProcess()
 
 	if assert.NotNil(t.Suite.T(), err) {

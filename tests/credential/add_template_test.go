@@ -52,6 +52,7 @@ func (t *testAddTemplate) Test01ErrorSenderNotFound() {
 			"subjectKey",
 			"description",
 		).
+		MakeOperation().
 		RunPreProcess()
 
 	if assert.NotNil(t.Suite.T(), err) {

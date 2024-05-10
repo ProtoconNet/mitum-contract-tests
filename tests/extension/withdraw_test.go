@@ -42,7 +42,9 @@ func (t *testWithdrawOperator) Test01ErrorSenderNotFound() {
 	err := t.Create().
 		SetAccount(t.senderKey, 1000, t.GenesisCurrency, t.Sender(), false).
 		SetContractAccount(t.Sender()[0].Address(), t.contract1Key, 1000, t.GenesisCurrency, t.Contract(), true).
-		SetAmount(100, t.GenesisCurrency).RunPreProcess()
+		SetAmount(100, t.GenesisCurrency).
+		MakeOperation().
+		RunPreProcess()
 
 	if assert.NotNil(t.Suite.T(), err) {
 		t.Suite.T().Log(err.Error())
@@ -54,7 +56,9 @@ func (t *testWithdrawOperator) Test02ErrorSenderIsContract() {
 		SetAccount(t.senderKey, 1000, t.GenesisCurrency, t.owner, true).
 		SetContractAccount(t.owner[0].Address(), t.contract1Key, 1000, t.GenesisCurrency, t.Sender(), true).
 		SetContractAccount(t.Sender()[0].Address(), t.contract2Key, 1000, t.GenesisCurrency, t.Contract(), true).
-		SetAmount(100, t.GenesisCurrency).RunPreProcess()
+		SetAmount(100, t.GenesisCurrency).
+		MakeOperation().
+		RunPreProcess()
 
 	if assert.NotNil(t.Suite.T(), err) {
 		t.Suite.T().Log(err.Error())

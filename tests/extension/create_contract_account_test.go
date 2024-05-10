@@ -39,7 +39,9 @@ func (t *testCreateContractAccount) Test01ErrorSenderNotFound() {
 	err := t.Create().
 		SetAccount(t.senderKey, 1000, t.GenesisCurrency, t.Sender(), false).
 		SetAccount(t.targetKey, 0, t.GenesisCurrency, t.Target(), false).
-		SetAmount(100, t.GenesisCurrency).RunPreProcess()
+		SetAmount(100, t.GenesisCurrency).
+		MakeOperation().
+		RunPreProcess()
 
 	if assert.NotNil(t.Suite.T(), err) {
 		t.Suite.T().Log(err.Error())
@@ -51,7 +53,9 @@ func (t *testCreateContractAccount) Test02ErrorSenderIsContract() {
 		SetAccount(t.senderKey, 1000, t.GenesisCurrency, t.owner, true).
 		SetContractAccount(t.owner[0].Address(), t.contractKey, 1000, t.GenesisCurrency, t.Sender(), true).
 		SetAccount(t.targetKey, 0, t.GenesisCurrency, t.Target(), false).
-		SetAmount(100, t.GenesisCurrency).RunPreProcess()
+		SetAmount(100, t.GenesisCurrency).
+		MakeOperation().
+		RunPreProcess()
 
 	if assert.NotNil(t.Suite.T(), err) {
 		t.Suite.T().Log(err.Error())
@@ -62,7 +66,9 @@ func (t *testCreateContractAccount) Test03ErrorTargetExist() {
 	err := t.Create().
 		SetAccount(t.senderKey, 1000, t.GenesisCurrency, t.Sender(), true).
 		SetAccount(t.targetKey, 0, t.GenesisCurrency, t.Target(), true).
-		SetAmount(100, t.GenesisCurrency).RunPreProcess()
+		SetAmount(100, t.GenesisCurrency).
+		MakeOperation().
+		RunPreProcess()
 
 	if assert.NotNil(t.Suite.T(), err) {
 		t.Suite.T().Log(err.Error())
@@ -73,7 +79,9 @@ func (t *testCreateContractAccount) Test04ErrorCurrencyNotFound() {
 	err := t.Create().
 		SetAccount(t.senderKey, 1000, t.GenesisCurrency, t.Sender(), true).
 		SetAccount(t.targetKey, 0, t.GenesisCurrency, t.Target(), false).
-		SetAmount(100, types.CurrencyID("FOO")).RunPreProcess()
+		SetAmount(100, types.CurrencyID("FOO")).
+		MakeOperation().
+		RunPreProcess()
 
 	if assert.NotNil(t.Suite.T(), err) {
 		t.Suite.T().Log(err.Error())

@@ -1,6 +1,7 @@
 package currency
 
 import (
+	"github.com/ProtoconNet/mitum-contract-tests/tests/util"
 	"github.com/ProtoconNet/mitum-currency/v3/operation/test"
 	"testing"
 
@@ -26,7 +27,7 @@ type testCreateAccount struct {
 }
 
 func (t *testCreateAccount) SetupTest() {
-	opr := currency.NewTestCreateAccountProcessor()
+	opr := currency.NewTestCreateAccountProcessor(util.Encoders)
 	t.TestCreateAccountProcessor = opr
 	t.Setup()
 	t.owner = make([]test.Account, 1)
@@ -54,7 +55,7 @@ func (t *testCreateAccount) Test02ErrorSenderIsContract() {
 		SetContractAccount(t.owner[0].Address(), t.contractKey, 1000, t.GenesisCurrency, t.Sender(), true).
 		SetAccount(t.targetKey, 100, t.GenesisCurrency, t.Target(), false).
 		SetAmount(100, t.GenesisCurrency).
-		MakeOperation().
+		MakeOperation().Print("test.json").
 		RunPreProcess()
 
 	if assert.NotNil(t.Suite.T(), err) {
@@ -94,6 +95,16 @@ func (t *testCreateAccount) Test05ErrorIsValid() {
 		SetAccount(t.targetKey, 0, t.GenesisCurrency, t.Target(), false).
 		SetAmount(-100, types.CurrencyID("FOO")).
 		MakeOperation().
+		IsValid()
+
+	if assert.NotNil(t.Suite.T(), err) {
+		t.Suite.T().Log(err.Error())
+	}
+}
+
+func (t *testCreateAccount) Test06ErrorLoadJson() {
+	err := t.Create().
+		LoadOperation("create-account.json").
 		IsValid()
 
 	if assert.NotNil(t.Suite.T(), err) {

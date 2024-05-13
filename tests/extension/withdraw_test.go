@@ -1,6 +1,7 @@
 package extension
 
 import (
+	"github.com/ProtoconNet/mitum-contract-tests/tests/util"
 	"github.com/ProtoconNet/mitum-currency/v3/operation/extension"
 	"github.com/ProtoconNet/mitum-currency/v3/operation/test"
 	"testing"
@@ -27,7 +28,7 @@ type testWithdrawOperator struct {
 }
 
 func (t *testWithdrawOperator) SetupTest() {
-	opr := extension.NewTestWithdrawProcessor()
+	opr := extension.NewTestWithdrawProcessor(util.Encoders)
 	t.TestWithdrawProcessor = opr
 	t.Setup()
 	t.owner = make([]test.Account, 1)

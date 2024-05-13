@@ -1,6 +1,7 @@
 package extension
 
 import (
+	"github.com/ProtoconNet/mitum-contract-tests/tests/util"
 	"github.com/ProtoconNet/mitum-currency/v3/operation/extension"
 	"github.com/ProtoconNet/mitum-currency/v3/operation/test"
 	"testing"
@@ -26,7 +27,7 @@ type testCreateContractAccount struct {
 }
 
 func (t *testCreateContractAccount) SetupTest() {
-	opr := extension.NewTestCreateContractAccountProcessor()
+	opr := extension.NewTestCreateContractAccountProcessor(util.Encoders)
 	t.TestCreateContractAccountProcessor = opr
 	t.Setup()
 	t.owner = make([]test.Account, 1)

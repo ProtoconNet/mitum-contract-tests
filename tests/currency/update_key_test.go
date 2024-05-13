@@ -1,6 +1,7 @@
 package currency
 
 import (
+	"github.com/ProtoconNet/mitum-contract-tests/tests/util"
 	"github.com/ProtoconNet/mitum-currency/v3/operation/currency"
 	"github.com/ProtoconNet/mitum-currency/v3/operation/test"
 	"github.com/stretchr/testify/assert"
@@ -24,7 +25,7 @@ type testUpdateKey struct {
 }
 
 func (t *testUpdateKey) SetupTest() {
-	opr := currency.NewTestUpdateKeyProcessor()
+	opr := currency.NewTestUpdateKeyProcessor(util.Encoders)
 	t.TestUpdateKeyProcessor = opr
 	t.TestProcessor.Setup()
 	t.owner = make([]test.Account, 1)

@@ -1,6 +1,7 @@
 package currency
 
 import (
+	"github.com/ProtoconNet/mitum-contract-tests/tests/util"
 	"github.com/ProtoconNet/mitum-currency/v3/operation/currency"
 	"github.com/ProtoconNet/mitum-currency/v3/operation/test"
 	"github.com/stretchr/testify/assert"
@@ -23,7 +24,7 @@ type testMint struct {
 }
 
 func (t *testMint) SetupTest() {
-	opr := currency.NewTestMintProcessor()
+	opr := currency.NewTestMintProcessor(util.Encoders)
 	t.TestMintProcessor = opr
 	t.Setup()
 	t.owner = make([]test.Account, 1)
@@ -36,7 +37,7 @@ func (t *testMint) Test01ErrorCurrencyNotFound() {
 		SetCurrency("ABC", 10000, t.GenesisAddr, false).
 		SetAccount(t.receiverKey, 100, t.GenesisCurrency, t.Receiver(), true).
 		SetAmount(100, t.Currency()).
-		MakeOperation().
+		MakeOperation().Print("mint-test.json").
 		RunPreProcess()
 
 	if assert.NotNil(t.Suite.T(), err) {

@@ -1,6 +1,7 @@
 package currency
 
 import (
+	"github.com/ProtoconNet/mitum-contract-tests/tests/util"
 	"github.com/ProtoconNet/mitum-currency/v3/operation/test"
 	"testing"
 
@@ -26,7 +27,7 @@ type testTransfer struct {
 }
 
 func (t *testTransfer) SetupTest() {
-	opr := currency.NewTestTransferProcessor()
+	opr := currency.NewTestTransferProcessor(util.Encoders)
 	t.TestTransferProcessor = opr
 	t.Setup()
 	t.owner = make([]test.Account, 1)

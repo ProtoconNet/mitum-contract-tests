@@ -3,10 +3,10 @@ github.com/Masterminds/semver/v3 v3.2.1 h1:RN9w6+7QoMeJVGyfmbcgs28Br8cvmnucEXnY0
 github.com/Masterminds/semver/v3 v3.2.1/go.mod h1:qvl/7zhW3nngYb5+80sSMF+FG2BjYrf8m9wsX0PNOMQ=
 github.com/ProtoconNet/mitum-credential v0.0.0-20240510070937-e36b279dc15c h1:PQWmCSxA9GzLJd6cgx/sIeNUFsiMaOMOausbJGcAFFQ=
 github.com/ProtoconNet/mitum-credential v0.0.0-20240510070937-e36b279dc15c/go.mod h1:4mcdVQ+bjbOIcD7d3HHU50UpgKoP1lKIUkEXiCD8J6c=
-github.com/ProtoconNet/mitum-currency/v3 v3.0.0-alpha.0.20240514004010-a34e2a910853 h1:K5OsEL5dHLtQwycL8vPFtHU9t+Xyjpg3EAVkZejF7T8=
-github.com/ProtoconNet/mitum-currency/v3 v3.0.0-alpha.0.20240514004010-a34e2a910853/go.mod h1:fLXG7vhuakQKLtvUYF0/xqF3gQGrebQW7X/o7OKB4cM=
-github.com/ProtoconNet/mitum2 v0.0.0-20240415083536-4ac73fa8ba0b h1:tsKDrRPNIiEqVAPqj0Hc65ylY1CqO4Zx/kMdi/mS9Uc=
-github.com/ProtoconNet/mitum2 v0.0.0-20240415083536-4ac73fa8ba0b/go.mod h1:XhqRo5FN8fY7NfuGp5B+ArTi5S67l2Lv585Gbxg8SZs=
+github.com/ProtoconNet/mitum-currency/v3 v3.0.0-alpha.0.20240514063122-972c2fbe37e1 h1:LNWoduLly9xFuqgOvdlU9qp7JM6Ht7i/ASPGXv5X/AA=
+github.com/ProtoconNet/mitum-currency/v3 v3.0.0-alpha.0.20240514063122-972c2fbe37e1/go.mod h1:+Mb1JgOO7BGYU22UtzYYx3UXeuGi2mqmhtXxKRceHAA=
+github.com/ProtoconNet/mitum2 v0.0.0-20240514051137-1a856cf657db h1:4JW4YDExvx19ilNF0PMolGsVgX80EZs999RC9qOpDoU=
+github.com/ProtoconNet/mitum2 v0.0.0-20240514051137-1a856cf657db/go.mod h1:XhqRo5FN8fY7NfuGp5B+ArTi5S67l2Lv585Gbxg8SZs=
 github.com/aead/siphash v1.0.1/go.mod h1:Nywa3cDsYNNK3gaciGTWPwHt0wlpNV15vwmswBAUSII=
 github.com/alecthomas/assert/v2 v2.6.0 h1:o3WJwILtexrEUk3cUVal3oiQY2tfgr/FHWiz/v2n4FU=
 github.com/alecthomas/assert/v2 v2.6.0/go.mod h1:Bze95FyfUr7x34QZrjL+XP+0qgp/zg8yS+TtBj1WA3k=

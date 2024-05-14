@@ -4,7 +4,7 @@ go 1.22.1
 
 require (
 	github.com/ProtoconNet/mitum-credential v0.0.0-20240510070937-e36b279dc15c
-	github.com/ProtoconNet/mitum-currency/v3 v3.0.0-alpha.0.20240513083046-d944e7bf60ae
+	github.com/ProtoconNet/mitum-currency/v3 v3.0.0-alpha.0.20240514004010-a34e2a910853
 	github.com/ProtoconNet/mitum2 v0.0.0-20240415083536-4ac73fa8ba0b
 	github.com/stretchr/testify v1.9.0
 )

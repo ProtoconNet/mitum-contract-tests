@@ -112,6 +112,15 @@ func (t *testCreateAccount) Test06ErrorLoadJson() {
 	}
 }
 
+func (t *testCreateAccount) Test06ErrorDecodeJson() {
+	err := t.Create().
+		Decode("create-account.json")
+
+	if assert.NotNil(t.Suite.T(), err) {
+		t.Suite.T().Log(err.Error())
+	}
+}
+
 func TestCreateAccount(t *testing.T) {
 	suite.Run(t, new(testCreateAccount))
 }

@@ -4,6 +4,7 @@ import (
 	"github.com/ProtoconNet/mitum-contract-tests/tests/util"
 	"github.com/ProtoconNet/mitum-currency/v3/operation/extension"
 	"github.com/ProtoconNet/mitum-currency/v3/operation/test"
+	"github.com/ProtoconNet/mitum-currency/v3/types"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -19,14 +20,18 @@ import (
 type testUpdateOperator struct {
 	suite.Suite
 	extension.TestUpdateOperatorProcessor
+	owner        []test.Account
+	sender       []test.Account
+	sender2      []test.Account
+	contract     []test.Account
+	operators    []test.Account
+	currency     []types.CurrencyID
 	senderKey    string // Private Key
 	sender2Key   string // Private Key
 	ownerKey     string // Private Key
 	operatorKey  string // Private Key
 	contract1Key string // Private Key
 	contract2Key string // Private Key
-	owner        []test.Account
-	sender2      []test.Account
 }
 
 func (t *testUpdateOperator) SetupTest() {
@@ -34,7 +39,11 @@ func (t *testUpdateOperator) SetupTest() {
 	t.TestUpdateOperatorProcessor = opr
 	t.Setup()
 	t.owner = make([]test.Account, 1)
+	t.sender = make([]test.Account, 1)
 	t.sender2 = make([]test.Account, 1)
+	t.contract = make([]test.Account, 1)
+	t.operators = make([]test.Account, 1)
+	t.currency = make([]types.CurrencyID, 1)
 	t.senderKey = t.NewPrivateKey("sender")
 	t.sender2Key = t.NewPrivateKey("sender2")
 	t.ownerKey = t.NewPrivateKey("owner")
@@ -45,10 +54,10 @@ func (t *testUpdateOperator) SetupTest() {
 
 func (t *testUpdateOperator) Test01ErrorSenderNotFound() {
 	err := t.Create().
-		SetAccount(t.senderKey, 1000, t.GenesisCurrency, t.Sender(), false).
-		SetContractAccount(t.Sender()[0].Address(), t.contract1Key, 1000, t.GenesisCurrency, t.Contract(), true).
-		SetAccount(t.operatorKey, 1000, t.GenesisCurrency, t.Operators(), true).
-		MakeOperation().
+		SetAccount(t.senderKey, 1000, t.GenesisCurrency, t.sender, false).
+		SetContractAccount(t.sender[0].Address(), t.contract1Key, 1000, t.GenesisCurrency, t.contract, true).
+		SetAccount(t.operatorKey, 1000, t.GenesisCurrency, t.operators, true).
+		MakeOperation(t.sender[0].Address(), t.sender[0].Priv(), t.contract[0].Address(), t.operators, t.GenesisCurrency).
 		RunPreProcess()
 
 	if assert.NotNil(t.Suite.T(), err) {
@@ -56,13 +65,13 @@ func (t *testUpdateOperator) Test01ErrorSenderNotFound() {
 	}
 }
 
-func (t *testUpdateOperator) Test02ErrorSenderIsContract() {
+func (t *testUpdateOperator) Test02ErrorSenderIscontract() {
 	err := t.Create().
 		SetAccount(t.senderKey, 1000, t.GenesisCurrency, t.owner, true).
-		SetContractAccount(t.owner[0].Address(), t.contract1Key, 1000, t.GenesisCurrency, t.Sender(), true).
-		SetContractAccount(t.Sender()[0].Address(), t.contract2Key, 1000, t.GenesisCurrency, t.Contract(), true).
-		SetAccount(t.operatorKey, 1000, t.GenesisCurrency, t.Operators(), true).
-		MakeOperation().
+		SetContractAccount(t.owner[0].Address(), t.contract1Key, 1000, t.GenesisCurrency, t.sender, true).
+		SetContractAccount(t.sender[0].Address(), t.contract2Key, 1000, t.GenesisCurrency, t.contract, true).
+		SetAccount(t.operatorKey, 1000, t.GenesisCurrency, t.operators, true).
+		MakeOperation(t.sender[0].Address(), t.sender[0].Priv(), t.contract[0].Address(), t.operators, t.GenesisCurrency).
 		RunPreProcess()
 
 	if assert.NotNil(t.Suite.T(), err) {
@@ -72,10 +81,10 @@ func (t *testUpdateOperator) Test02ErrorSenderIsContract() {
 
 func (t *testUpdateOperator) Test03ErrorOperatorNotFound() {
 	err := t.Create().
-		SetAccount(t.senderKey, 1000, t.GenesisCurrency, t.Sender(), true).
-		SetContractAccount(t.Sender()[0].Address(), t.contract1Key, 1000, t.GenesisCurrency, t.Contract(), true).
-		SetAccount(t.operatorKey, 1000, t.GenesisCurrency, t.Operators(), false).
-		MakeOperation().
+		SetAccount(t.senderKey, 1000, t.GenesisCurrency, t.sender, true).
+		SetContractAccount(t.sender[0].Address(), t.contract1Key, 1000, t.GenesisCurrency, t.contract, true).
+		SetAccount(t.operatorKey, 1000, t.GenesisCurrency, t.operators, false).
+		MakeOperation(t.sender[0].Address(), t.sender[0].Priv(), t.contract[0].Address(), t.operators, t.GenesisCurrency).
 		RunPreProcess()
 
 	if assert.NotNil(t.Suite.T(), err) {
@@ -83,12 +92,12 @@ func (t *testUpdateOperator) Test03ErrorOperatorNotFound() {
 	}
 }
 
-func (t *testUpdateOperator) Test04ErrorOperatorIsContract() {
+func (t *testUpdateOperator) Test04ErrorOperatorIscontract() {
 	err := t.Create().
-		SetAccount(t.senderKey, 1000, t.GenesisCurrency, t.Sender(), true).
-		SetContractAccount(t.Sender()[0].Address(), t.contract1Key, 1000, t.GenesisCurrency, t.Contract(), true).
-		SetContractAccount(t.Sender()[0].Address(), t.contract2Key, 1000, t.GenesisCurrency, t.Operators(), true).
-		MakeOperation().
+		SetAccount(t.senderKey, 1000, t.GenesisCurrency, t.sender, true).
+		SetContractAccount(t.sender[0].Address(), t.contract1Key, 1000, t.GenesisCurrency, t.contract, true).
+		SetContractAccount(t.sender[0].Address(), t.contract2Key, 1000, t.GenesisCurrency, t.operators, true).
+		MakeOperation(t.sender[0].Address(), t.sender[0].Priv(), t.contract[0].Address(), t.operators, t.GenesisCurrency).
 		RunPreProcess()
 
 	if assert.NotNil(t.Suite.T(), err) {
@@ -98,11 +107,11 @@ func (t *testUpdateOperator) Test04ErrorOperatorIsContract() {
 
 func (t *testUpdateOperator) Test05ErrorSender2() {
 	err := t.Create().
-		SetAccount(t.senderKey, 1000, t.GenesisCurrency, t.Sender(), true).
+		SetAccount(t.senderKey, 1000, t.GenesisCurrency, t.sender, true).
 		SetAccount(t.sender2Key, 1000, t.GenesisCurrency, t.sender2, true).
-		SetContractAccount(t.sender2[0].Address(), t.contract1Key, 1000, t.GenesisCurrency, t.Contract(), true).
-		SetAccount(t.operatorKey, 1000, t.GenesisCurrency, t.Operators(), true).
-		MakeOperation().
+		SetContractAccount(t.sender2[0].Address(), t.contract1Key, 1000, t.GenesisCurrency, t.contract, true).
+		SetAccount(t.operatorKey, 1000, t.GenesisCurrency, t.operators, true).
+		MakeOperation(t.sender[0].Address(), t.sender[0].Priv(), t.contract[0].Address(), t.operators, t.GenesisCurrency).
 		RunPreProcess()
 
 	if assert.NotNil(t.Suite.T(), err) {

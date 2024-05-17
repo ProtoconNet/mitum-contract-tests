@@ -1,7 +1,9 @@
-package currency
+package credential
 
 import (
+	"github.com/ProtoconNet/mitum-contract-tests/tests/util"
 	"github.com/ProtoconNet/mitum-currency/v3/operation/test"
+	currencytypes "github.com/ProtoconNet/mitum-currency/v3/types"
 	"testing"
 
 	"github.com/ProtoconNet/mitum-credential/operation/credential"
@@ -19,6 +21,11 @@ import (
 type testAddTemplate struct {
 	suite.Suite
 	credential.TestAddTemplateProcessor
+	sender      []test.Account
+	contract    []test.Account
+	creator     []test.Account
+	currency    []currencytypes.CurrencyID
+	ownerKey    string // Private Key
 	senderKey   string // Private Key
 	contractKey string // Private Key
 	creatorKey  string // Private Key
@@ -26,21 +33,25 @@ type testAddTemplate struct {
 }
 
 func (t *testAddTemplate) SetupTest() {
-	opr := credential.NewTestAddTemplateProcessor()
+	opr := credential.NewTestAddTemplateProcessor(util.Encoders)
 	t.TestAddTemplateProcessor = opr
 	t.Setup()
 	t.owner = make([]test.Account, 1)
+	t.sender = make([]test.Account, 1)
+	t.contract = make([]test.Account, 1)
+	t.creator = make([]test.Account, 1)
+	t.currency = make([]currencytypes.CurrencyID, 1)
+	t.ownerKey = t.NewPrivateKey("owner")
 	t.senderKey = t.NewPrivateKey("sender")
 	t.contractKey = t.NewPrivateKey("contract")
 	t.creatorKey = t.NewPrivateKey("creator")
-
 }
 
 func (t *testAddTemplate) Test01ErrorSenderNotFound() {
 	err := t.Create().
-		SetAccount(t.senderKey, 1000, t.GenesisCurrency, t.Sender(), false).
-		SetContractAccount(t.Sender()[0].Address(), t.contractKey, 1000, t.GenesisCurrency, t.Contract(), true).
-		SetAccount(t.creatorKey, 1000, t.GenesisCurrency, t.Creator(), true).
+		SetAccount(t.senderKey, 1000, t.GenesisCurrency, t.sender, false).
+		SetContractAccount(t.sender[0].Address(), t.contractKey, 1000, t.GenesisCurrency, t.contract, true).
+		SetAccount(t.creatorKey, 1000, t.GenesisCurrency, t.creator, true).
 		SetTemplate(
 			"templateID",
 			"templateName",
@@ -52,7 +63,7 @@ func (t *testAddTemplate) Test01ErrorSenderNotFound() {
 			"subjectKey",
 			"description",
 		).
-		MakeOperation().
+		MakeOperation(t.sender[0].Address(), t.sender[0].Priv(), t.contract[0].Address(), t.creator[0].Address(), t.GenesisCurrency).
 		RunPreProcess()
 
 	if assert.NotNil(t.Suite.T(), err) {
@@ -60,40 +71,30 @@ func (t *testAddTemplate) Test01ErrorSenderNotFound() {
 	}
 }
 
-//
-//func (t *testAddTemplate) Test02ErrorSenderIsContract() {
-//	err := t.Create().
-//		SetAccount(t.senderKey, 1000, t.GenesisCurrency, t.owner, true).
-//		SetContractAccount(t.owner[0].Address(), t.contractKey, 1000, t.GenesisCurrency, t.Sender(), true).
-//		SetAccount(t.targetKey, 100, t.GenesisCurrency, t.Target(), false).
-//		SetAmount(100, t.GenesisCurrency).RunPreProcess()
-//
-//	if assert.NotNil(t.Suite.T(), err) {
-//		t.Suite.T().Log(err.Error())
-//	}
-//}
-//
-//func (t *testAddTemplate) Test03ErrorTargetExist() {
-//	err := t.Create().
-//		SetAccount(t.senderKey, 1000, t.GenesisCurrency, t.Sender(), true).
-//		SetAccount(t.targetKey, 0, t.GenesisCurrency, t.Target(), true).
-//		SetAmount(100, t.GenesisCurrency).RunPreProcess()
-//
-//	if assert.NotNil(t.Suite.T(), err) {
-//		t.Suite.T().Log(err.Error())
-//	}
-//}
-//
-//func (t *testAddTemplate) Test04ErrorCurrencyNotFound() {
-//	err := t.Create().
-//		SetAccount(t.senderKey, 1000, t.GenesisCurrency, t.Sender(), true).
-//		SetAccount(t.targetKey, 0, t.GenesisCurrency, t.Target(), false).
-//		SetAmount(100, types.CurrencyID("FOO")).RunPreProcess()
-//
-//	if assert.NotNil(t.Suite.T(), err) {
-//		t.Suite.T().Log(err.Error())
-//	}
-//}
+func (t *testAddTemplate) Test02ErrorSenderIscontract() {
+	err := t.Create().
+		SetAccount(t.ownerKey, 1000, t.GenesisCurrency, t.owner, true).
+		SetContractAccount(t.owner[0].Address(), t.senderKey, 1000, t.GenesisCurrency, t.sender, true).
+		SetContractAccount(t.owner[0].Address(), t.contractKey, 1000, t.GenesisCurrency, t.contract, true).
+		SetAccount(t.creatorKey, 1000, t.GenesisCurrency, t.creator, true).
+		SetTemplate(
+			"templateID",
+			"templateName",
+			types.Date("2024-01-01"),
+			types.Date("2024-01-01"),
+			types.Bool(true),
+			types.Bool(true),
+			"displayName",
+			"subjectKey",
+			"description",
+		).
+		MakeOperation(t.sender[0].Address(), t.sender[0].Priv(), t.contract[0].Address(), t.creator[0].Address(), t.GenesisCurrency).
+		RunPreProcess()
+
+	if assert.NotNil(t.Suite.T(), err) {
+		t.Suite.T().Log(err.Error())
+	}
+}
 
 func TestAddTemplate(t *testing.T) {
 	suite.Run(t, new(testAddTemplate))

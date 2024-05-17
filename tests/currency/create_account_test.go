@@ -23,7 +23,10 @@ type testCreateAccount struct {
 	senderKey   string // Private Key
 	targetKey   string // Private Key
 	contractKey string // Private Key
+	sender      []test.Account
+	target      []test.Account
 	owner       []test.Account
+	amounts     []types.Amount
 }
 
 func (t *testCreateAccount) SetupTest() {
@@ -31,6 +34,9 @@ func (t *testCreateAccount) SetupTest() {
 	t.TestCreateAccountProcessor = opr
 	t.Setup()
 	t.owner = make([]test.Account, 1)
+	t.sender = make([]test.Account, 1)
+	t.target = make([]test.Account, 1)
+	t.amounts = make([]types.Amount, 1)
 	t.senderKey = t.NewPrivateKey("sender")
 	t.targetKey = t.NewPrivateKey("target")
 	t.contractKey = t.NewPrivateKey("contract")
@@ -38,10 +44,11 @@ func (t *testCreateAccount) SetupTest() {
 
 func (t *testCreateAccount) Test01ErrorSenderNotFound() {
 	err := t.Create().
-		SetAccount(t.senderKey, 1000, t.GenesisCurrency, t.Sender(), false).
-		SetAccount(t.targetKey, 0, t.GenesisCurrency, t.Target(), false).
-		SetAmount(100, t.GenesisCurrency).
-		MakeOperation().
+		SetAccount(t.senderKey, 1000, t.GenesisCurrency, t.sender, false).
+		SetAccount(t.targetKey, 0, t.GenesisCurrency, t.target, false).
+		SetAmount(100, t.GenesisCurrency, t.amounts).
+		MakeItem(t.target[0], t.amounts, t.Items()).
+		MakeOperation(t.sender[0].Address(), t.sender[0].Priv(), t.Items()).
 		RunPreProcess()
 
 	if assert.NotNil(t.Suite.T(), err) {
@@ -49,13 +56,14 @@ func (t *testCreateAccount) Test01ErrorSenderNotFound() {
 	}
 }
 
-func (t *testCreateAccount) Test02ErrorSenderIsContract() {
+func (t *testCreateAccount) Test02ErrorSenderIscontract() {
 	err := t.Create().
 		SetAccount(t.senderKey, 1000, t.GenesisCurrency, t.owner, true).
-		SetContractAccount(t.owner[0].Address(), t.contractKey, 1000, t.GenesisCurrency, t.Sender(), true).
-		SetAccount(t.targetKey, 100, t.GenesisCurrency, t.Target(), false).
-		SetAmount(100, t.GenesisCurrency).
-		MakeOperation().Print("test.json").
+		SetContractAccount(t.owner[0].Address(), t.contractKey, 1000, t.GenesisCurrency, t.sender, true).
+		SetAccount(t.targetKey, 100, t.GenesisCurrency, t.target, false).
+		SetAmount(100, t.GenesisCurrency, t.amounts).
+		MakeItem(t.target[0], t.amounts, t.Items()).
+		MakeOperation(t.sender[0].Address(), t.sender[0].Priv(), t.Items()).Print("test.json").
 		RunPreProcess()
 
 	if assert.NotNil(t.Suite.T(), err) {
@@ -65,10 +73,11 @@ func (t *testCreateAccount) Test02ErrorSenderIsContract() {
 
 func (t *testCreateAccount) Test03ErrorTargetExist() {
 	err := t.Create().
-		SetAccount(t.senderKey, 1000, t.GenesisCurrency, t.Sender(), true).
-		SetAccount(t.targetKey, 0, t.GenesisCurrency, t.Target(), true).
-		SetAmount(100, t.GenesisCurrency).
-		MakeOperation().
+		SetAccount(t.senderKey, 1000, t.GenesisCurrency, t.sender, true).
+		SetAccount(t.targetKey, 0, t.GenesisCurrency, t.target, true).
+		SetAmount(100, t.GenesisCurrency, t.amounts).
+		MakeItem(t.target[0], t.amounts, t.Items()).
+		MakeOperation(t.sender[0].Address(), t.sender[0].Priv(), t.Items()).
 		RunPreProcess()
 
 	if assert.NotNil(t.Suite.T(), err) {
@@ -78,10 +87,11 @@ func (t *testCreateAccount) Test03ErrorTargetExist() {
 
 func (t *testCreateAccount) Test04ErrorCurrencyNotFound() {
 	err := t.Create().
-		SetAccount(t.senderKey, 1000, t.GenesisCurrency, t.Sender(), true).
-		SetAccount(t.targetKey, 0, t.GenesisCurrency, t.Target(), false).
-		SetAmount(100, types.CurrencyID("FOO")).
-		MakeOperation().
+		SetAccount(t.senderKey, 1000, t.GenesisCurrency, t.sender, true).
+		SetAccount(t.targetKey, 0, t.GenesisCurrency, t.target, false).
+		SetAmount(100, types.CurrencyID("FOO"), t.amounts).
+		MakeItem(t.target[0], t.amounts, t.Items()).
+		MakeOperation(t.sender[0].Address(), t.sender[0].Priv(), t.Items()).
 		RunPreProcess()
 
 	if assert.NotNil(t.Suite.T(), err) {
@@ -91,10 +101,11 @@ func (t *testCreateAccount) Test04ErrorCurrencyNotFound() {
 
 func (t *testCreateAccount) Test05ErrorIsValid() {
 	err := t.Create().
-		SetAccount(t.senderKey, 1000, t.GenesisCurrency, t.Sender(), true).
-		SetAccount(t.targetKey, 0, t.GenesisCurrency, t.Target(), false).
-		SetAmount(-100, types.CurrencyID("FOO")).
-		MakeOperation().
+		SetAccount(t.senderKey, 1000, t.GenesisCurrency, t.sender, true).
+		SetAccount(t.targetKey, 0, t.GenesisCurrency, t.target, false).
+		SetAmount(-100, types.CurrencyID("FOO"), t.amounts).
+		MakeItem(t.target[0], t.amounts, t.Items()).
+		MakeOperation(t.sender[0].Address(), t.sender[0].Priv(), t.Items()).
 		IsValid()
 
 	if assert.NotNil(t.Suite.T(), err) {

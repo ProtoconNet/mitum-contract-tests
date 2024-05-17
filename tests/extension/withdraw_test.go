@@ -4,6 +4,7 @@ import (
 	"github.com/ProtoconNet/mitum-contract-tests/tests/util"
 	"github.com/ProtoconNet/mitum-currency/v3/operation/extension"
 	"github.com/ProtoconNet/mitum-currency/v3/operation/test"
+	"github.com/ProtoconNet/mitum-currency/v3/types"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -19,6 +20,11 @@ import (
 type testWithdrawOperator struct {
 	suite.Suite
 	extension.TestWithdrawProcessor
+	sender       []test.Account
+	contract     []test.Account
+	operators    []test.Account
+	amounts      []types.Amount
+	currency     []types.CurrencyID
 	senderKey    string // Private Key
 	ownerKey     string // Private Key
 	operatorKey  string // Private Key
@@ -32,6 +38,11 @@ func (t *testWithdrawOperator) SetupTest() {
 	t.TestWithdrawProcessor = opr
 	t.Setup()
 	t.owner = make([]test.Account, 1)
+	t.sender = make([]test.Account, 1)
+	t.contract = make([]test.Account, 1)
+	t.amounts = make([]types.Amount, 1)
+	t.operators = make([]test.Account, 1)
+	t.currency = make([]types.CurrencyID, 1)
 	t.senderKey = t.NewPrivateKey("sender")
 	t.ownerKey = t.NewPrivateKey("owner")
 	t.operatorKey = t.NewPrivateKey("operator")
@@ -41,10 +52,11 @@ func (t *testWithdrawOperator) SetupTest() {
 
 func (t *testWithdrawOperator) Test01ErrorSenderNotFound() {
 	err := t.Create().
-		SetAccount(t.senderKey, 1000, t.GenesisCurrency, t.Sender(), false).
-		SetContractAccount(t.Sender()[0].Address(), t.contract1Key, 1000, t.GenesisCurrency, t.Contract(), true).
-		SetAmount(100, t.GenesisCurrency).
-		MakeOperation().
+		SetAccount(t.senderKey, 1000, t.GenesisCurrency, t.sender, false).
+		SetContractAccount(t.sender[0].Address(), t.contract1Key, 1000, t.GenesisCurrency, t.contract, true).
+		SetAmount(100, t.GenesisCurrency, t.amounts).
+		MakeItem(t.contract[0], t.amounts, t.Items()).
+		MakeOperation(t.sender[0].Address(), t.sender[0].Priv(), t.Items()).
 		RunPreProcess()
 
 	if assert.NotNil(t.Suite.T(), err) {
@@ -52,13 +64,14 @@ func (t *testWithdrawOperator) Test01ErrorSenderNotFound() {
 	}
 }
 
-func (t *testWithdrawOperator) Test02ErrorSenderIsContract() {
+func (t *testWithdrawOperator) Test02ErrorSenderIscontract() {
 	err := t.Create().
 		SetAccount(t.senderKey, 1000, t.GenesisCurrency, t.owner, true).
-		SetContractAccount(t.owner[0].Address(), t.contract1Key, 1000, t.GenesisCurrency, t.Sender(), true).
-		SetContractAccount(t.Sender()[0].Address(), t.contract2Key, 1000, t.GenesisCurrency, t.Contract(), true).
-		SetAmount(100, t.GenesisCurrency).
-		MakeOperation().
+		SetContractAccount(t.owner[0].Address(), t.contract1Key, 1000, t.GenesisCurrency, t.sender, true).
+		SetContractAccount(t.sender[0].Address(), t.contract2Key, 1000, t.GenesisCurrency, t.contract, true).
+		SetAmount(100, t.GenesisCurrency, t.amounts).
+		MakeItem(t.contract[0], t.amounts, t.Items()).
+		MakeOperation(t.sender[0].Address(), t.sender[0].Priv(), t.Items()).
 		RunPreProcess()
 
 	if assert.NotNil(t.Suite.T(), err) {

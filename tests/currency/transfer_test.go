@@ -20,6 +20,10 @@ import (
 type testTransfer struct {
 	suite.Suite
 	currency.TestTransferProcessor
+	sender      []test.Account
+	receiver    []test.Account
+	amounts     []types.Amount
+	currency    []types.CurrencyID
 	senderKey   string // Private Key
 	receiverKey string // Private Key
 	contractKey string // Private Key
@@ -31,6 +35,10 @@ func (t *testTransfer) SetupTest() {
 	t.TestTransferProcessor = opr
 	t.Setup()
 	t.owner = make([]test.Account, 1)
+	t.sender = make([]test.Account, 1)
+	t.receiver = make([]test.Account, 1)
+	t.amounts = make([]types.Amount, 1)
+	t.currency = make([]types.CurrencyID, 1)
 	t.senderKey = t.NewPrivateKey("sender")
 	t.receiverKey = t.NewPrivateKey("receiver")
 	t.contractKey = t.NewPrivateKey("contract")
@@ -38,10 +46,11 @@ func (t *testTransfer) SetupTest() {
 
 func (t *testTransfer) Test01ErrorSenderNotFound() {
 	err := t.Create().
-		SetAccount(t.senderKey, 1000, t.GenesisCurrency, t.Sender(), false).
-		SetAccount(t.receiverKey, 100, t.GenesisCurrency, t.Receiver(), true).
-		SetAmount(100, t.GenesisCurrency).
-		MakeOperation().
+		SetAccount(t.senderKey, 1000, t.GenesisCurrency, t.sender, false).
+		SetAccount(t.receiverKey, 100, t.GenesisCurrency, t.receiver, true).
+		SetAmount(100, t.GenesisCurrency, t.amounts).
+		MakeItem(t.receiver[0], t.amounts, t.Items()).
+		MakeOperation(t.sender[0].Address(), t.sender[0].Priv(), t.Items()).
 		RunPreProcess()
 
 	if assert.NotNil(t.Suite.T(), err) {
@@ -49,13 +58,14 @@ func (t *testTransfer) Test01ErrorSenderNotFound() {
 	}
 }
 
-func (t *testTransfer) Test02ErrorSenderIsContract() {
+func (t *testTransfer) Test02ErrorSenderIscontract() {
 	err := t.Create().
 		SetAccount(t.senderKey, 1000, t.GenesisCurrency, t.owner, true).
-		SetContractAccount(t.owner[0].Address(), t.contractKey, 1000, t.GenesisCurrency, t.Sender(), true).
-		SetAccount(t.receiverKey, 100, t.GenesisCurrency, t.Receiver(), true).
-		SetAmount(100, t.GenesisCurrency).
-		MakeOperation().
+		SetContractAccount(t.owner[0].Address(), t.contractKey, 1000, t.GenesisCurrency, t.sender, true).
+		SetAccount(t.receiverKey, 100, t.GenesisCurrency, t.receiver, true).
+		SetAmount(100, t.GenesisCurrency, t.amounts).
+		MakeItem(t.receiver[0], t.amounts, t.Items()).
+		MakeOperation(t.sender[0].Address(), t.sender[0].Priv(), t.Items()).
 		RunPreProcess()
 
 	if assert.NotNil(t.Suite.T(), err) {
@@ -65,10 +75,11 @@ func (t *testTransfer) Test02ErrorSenderIsContract() {
 
 func (t *testTransfer) Test03ErrorCurrencyNotFound() {
 	err := t.Create().
-		SetAccount(t.senderKey, 1000, t.GenesisCurrency, t.Sender(), true).
-		SetAccount(t.receiverKey, 100, t.GenesisCurrency, t.Receiver(), true).
-		SetAmount(100, types.CurrencyID("FOO")).
-		MakeOperation().
+		SetAccount(t.senderKey, 1000, t.GenesisCurrency, t.sender, true).
+		SetAccount(t.receiverKey, 100, t.GenesisCurrency, t.receiver, true).
+		SetAmount(100, types.CurrencyID("FOO"), t.amounts).
+		MakeItem(t.receiver[0], t.amounts, t.Items()).
+		MakeOperation(t.sender[0].Address(), t.sender[0].Priv(), t.Items()).
 		RunPreProcess()
 
 	if assert.NotNil(t.Suite.T(), err) {

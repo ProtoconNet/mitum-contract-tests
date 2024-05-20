@@ -3,7 +3,7 @@ module github.com/ProtoconNet/mitum-contract-tests
 go 1.22.1
 
 require (
-	github.com/ProtoconNet/mitum-credential v0.0.0-20240517093850-290bf6269e50
+	github.com/ProtoconNet/mitum-credential v0.0.0-20240520003559-ab0e943ad859
 	github.com/ProtoconNet/mitum-currency/v3 v3.0.0-alpha.0.20240517084743-f1add73570a0
 	github.com/ProtoconNet/mitum2 v0.0.0-20240516232940-9c065b66904b
 	github.com/stretchr/testify v1.9.0

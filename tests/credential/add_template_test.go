@@ -96,6 +96,30 @@ func (t *testAddTemplate) Test02ErrorSenderIscontract() {
 	}
 }
 
+func (t *testAddTemplate) Test03ErrorServiceNotExist() {
+	err := t.Create().
+		SetAccount(t.senderKey, 1000, t.GenesisCurrency, t.sender, true).
+		SetContractAccount(t.sender[0].Address(), t.contractKey, 1000, t.GenesisCurrency, t.contract, true).
+		SetAccount(t.creatorKey, 1000, t.GenesisCurrency, t.creator, true).
+		SetTemplate(
+			"templateID",
+			"templateName",
+			types.Date("2024-01-01"),
+			types.Date("2024-01-01"),
+			types.Bool(true),
+			types.Bool(true),
+			"displayName",
+			"subjectKey",
+			"description",
+		).
+		MakeOperation(t.sender[0].Address(), t.sender[0].Priv(), t.contract[0].Address(), t.creator[0].Address(), t.GenesisCurrency).
+		RunPreProcess()
+
+	if assert.NotNil(t.Suite.T(), err) {
+		t.Suite.T().Log(err.Error())
+	}
+}
+
 func TestAddTemplate(t *testing.T) {
 	suite.Run(t, new(testAddTemplate))
 }

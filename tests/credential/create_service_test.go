@@ -55,6 +55,19 @@ func (t *testCreateService) Test01ErrorSenderNotFound() {
 	}
 }
 
+func (t *testCreateService) Test02ErrorServiceAlreadyExist() {
+	err := t.Create().
+		SetAccount(t.senderKey, 1000, t.GenesisCurrency, t.sender, true).
+		SetContractAccount(t.sender[0].Address(), t.contractKey, 1000, t.GenesisCurrency, t.contract, true).
+		SetService(t.contract[0].Address()).
+		MakeOperation(t.sender[0].Address(), t.sender[0].Priv(), t.contract[0].Address(), t.GenesisCurrency).
+		RunPreProcess()
+
+	if assert.NotNil(t.Suite.T(), err) {
+		t.Suite.T().Log(err.Error())
+	}
+}
+
 func TestCreateService(t *testing.T) {
 	suite.Run(t, new(testCreateService))
 }

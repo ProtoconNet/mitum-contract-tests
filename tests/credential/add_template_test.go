@@ -35,7 +35,8 @@ type testAddTemplate struct {
 func (t *testAddTemplate) SetupTest() {
 	opr := credential.NewTestAddTemplateProcessor(util.Encoders)
 	t.TestAddTemplateProcessor = opr
-	t.Setup()
+	mockGetter := test.NewMockStateGetter()
+	t.Setup(mockGetter)
 	t.owner = make([]test.Account, 1)
 	t.sender = make([]test.Account, 1)
 	t.contract = make([]test.Account, 1)
@@ -66,7 +67,7 @@ func (t *testAddTemplate) Test01ErrorSenderNotFound() {
 		MakeOperation(t.sender[0].Address(), t.sender[0].Priv(), t.contract[0].Address(), t.creator[0].Address(), t.GenesisCurrency).
 		RunPreProcess()
 
-	if assert.NotNil(t.Suite.T(), err) {
+	if assert.NotNil(t.Suite.T(), err.Error()) {
 		t.Suite.T().Log(err.Error())
 	}
 }
@@ -91,7 +92,7 @@ func (t *testAddTemplate) Test02ErrorSenderIscontract() {
 		MakeOperation(t.sender[0].Address(), t.sender[0].Priv(), t.contract[0].Address(), t.creator[0].Address(), t.GenesisCurrency).
 		RunPreProcess()
 
-	if assert.NotNil(t.Suite.T(), err) {
+	if assert.NotNil(t.Suite.T(), err.Error()) {
 		t.Suite.T().Log(err.Error())
 	}
 }
@@ -115,7 +116,7 @@ func (t *testAddTemplate) Test03ErrorServiceNotExist() {
 		MakeOperation(t.sender[0].Address(), t.sender[0].Priv(), t.contract[0].Address(), t.creator[0].Address(), t.GenesisCurrency).
 		RunPreProcess()
 
-	if assert.NotNil(t.Suite.T(), err) {
+	if assert.NotNil(t.Suite.T(), err.Error()) {
 		t.Suite.T().Log(err.Error())
 	}
 }

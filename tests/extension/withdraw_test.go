@@ -36,7 +36,8 @@ type testWithdrawOperator struct {
 func (t *testWithdrawOperator) SetupTest() {
 	opr := extension.NewTestWithdrawProcessor(util.Encoders)
 	t.TestWithdrawProcessor = opr
-	t.Setup()
+	mockGetter := test.NewMockStateGetter()
+	t.Setup(mockGetter)
 	t.owner = make([]test.Account, 1)
 	t.sender = make([]test.Account, 1)
 	t.contract = make([]test.Account, 1)
@@ -59,7 +60,7 @@ func (t *testWithdrawOperator) Test01ErrorSenderNotFound() {
 		MakeOperation(t.sender[0].Address(), t.sender[0].Priv(), t.Items()).
 		RunPreProcess()
 
-	if assert.NotNil(t.Suite.T(), err) {
+	if assert.NotNil(t.Suite.T(), err.Error()) {
 		t.Suite.T().Log(err.Error())
 	}
 }
@@ -74,7 +75,7 @@ func (t *testWithdrawOperator) Test02ErrorSenderIscontract() {
 		MakeOperation(t.sender[0].Address(), t.sender[0].Priv(), t.Items()).
 		RunPreProcess()
 
-	if assert.NotNil(t.Suite.T(), err) {
+	if assert.NotNil(t.Suite.T(), err.Error()) {
 		t.Suite.T().Log(err.Error())
 	}
 }

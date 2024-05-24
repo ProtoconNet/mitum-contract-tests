@@ -31,7 +31,8 @@ type testUpdateKey struct {
 func (t *testUpdateKey) SetupTest() {
 	opr := currency.NewTestUpdateKeyProcessor(util.Encoders)
 	t.TestUpdateKeyProcessor = opr
-	t.TestProcessor.Setup()
+	mockGetter := test.NewMockStateGetter()
+	t.Setup(mockGetter)
 	t.owner = make([]test.Account, 1)
 	t.sender = make([]test.Account, 1)
 	t.target = make([]test.Account, 1)
@@ -48,7 +49,7 @@ func (t *testUpdateKey) Test01ErrorSenderNotFound() {
 		MakeOperation(t.sender[0].Address(), t.sender[0].Priv(), t.target[0].Keys(), t.GenesisCurrency).
 		RunPreProcess()
 
-	if assert.NotNil(t.Suite.T(), err) {
+	if assert.NotNil(t.Suite.T(), err.Error()) {
 		t.Suite.T().Log(err.Error())
 	}
 }
@@ -61,7 +62,7 @@ func (t *testUpdateKey) Test02ErrorSenderIscontract() {
 		MakeOperation(t.sender[0].Address(), t.sender[0].Priv(), t.target[0].Keys(), t.GenesisCurrency).
 		RunPreProcess()
 
-	if assert.NotNil(t.Suite.T(), err) {
+	if assert.NotNil(t.Suite.T(), err.Error()) {
 		t.Suite.T().Log(err.Error())
 	}
 }

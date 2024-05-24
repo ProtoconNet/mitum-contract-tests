@@ -32,7 +32,8 @@ type testCreateAccount struct {
 func (t *testCreateAccount) SetupTest() {
 	opr := currency.NewTestCreateAccountProcessor(util.Encoders)
 	t.TestCreateAccountProcessor = opr
-	t.Setup()
+	mockGetter := test.NewMockStateGetter()
+	t.Setup(mockGetter)
 	t.owner = make([]test.Account, 1)
 	t.sender = make([]test.Account, 1)
 	t.target = make([]test.Account, 1)
@@ -51,7 +52,7 @@ func (t *testCreateAccount) Test01ErrorSenderNotFound() {
 		MakeOperation(t.sender[0].Address(), t.sender[0].Priv(), t.Items()).
 		RunPreProcess()
 
-	if assert.NotNil(t.Suite.T(), err) {
+	if assert.NotNil(t.Suite.T(), err.Error()) {
 		t.Suite.T().Log(err.Error())
 	}
 }
@@ -66,7 +67,7 @@ func (t *testCreateAccount) Test02ErrorSenderIscontract() {
 		MakeOperation(t.sender[0].Address(), t.sender[0].Priv(), t.Items()).Print("test.json").
 		RunPreProcess()
 
-	if assert.NotNil(t.Suite.T(), err) {
+	if assert.NotNil(t.Suite.T(), err.Error()) {
 		t.Suite.T().Log(err.Error())
 	}
 }
@@ -80,7 +81,7 @@ func (t *testCreateAccount) Test03ErrorTargetExist() {
 		MakeOperation(t.sender[0].Address(), t.sender[0].Priv(), t.Items()).
 		RunPreProcess()
 
-	if assert.NotNil(t.Suite.T(), err) {
+	if assert.NotNil(t.Suite.T(), err.Error()) {
 		t.Suite.T().Log(err.Error())
 	}
 }
@@ -94,7 +95,7 @@ func (t *testCreateAccount) Test04ErrorCurrencyNotFound() {
 		MakeOperation(t.sender[0].Address(), t.sender[0].Priv(), t.Items()).
 		RunPreProcess()
 
-	if assert.NotNil(t.Suite.T(), err) {
+	if assert.NotNil(t.Suite.T(), err.Error()) {
 		t.Suite.T().Log(err.Error())
 	}
 }
@@ -108,7 +109,7 @@ func (t *testCreateAccount) Test05ErrorIsValid() {
 		MakeOperation(t.sender[0].Address(), t.sender[0].Priv(), t.Items()).
 		IsValid()
 
-	if assert.NotNil(t.Suite.T(), err) {
+	if assert.NotNil(t.Suite.T(), err.Error()) {
 		t.Suite.T().Log(err.Error())
 	}
 }
@@ -118,7 +119,7 @@ func (t *testCreateAccount) Test06ErrorLoadJson() {
 		LoadOperation("create-account.json").
 		IsValid()
 
-	if assert.NotNil(t.Suite.T(), err) {
+	if assert.NotNil(t.Suite.T(), err.Error()) {
 		t.Suite.T().Log(err.Error())
 	}
 }
@@ -127,7 +128,7 @@ func (t *testCreateAccount) Test06ErrorDecodeJson() {
 	err := t.Create().
 		Decode("create-account.json")
 
-	if assert.NotNil(t.Suite.T(), err) {
+	if assert.NotNil(t.Suite.T(), err.Error()) {
 		t.Suite.T().Log(err.Error())
 	}
 }

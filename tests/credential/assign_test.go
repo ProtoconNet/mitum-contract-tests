@@ -34,7 +34,8 @@ type testAssign struct {
 func (t *testAssign) SetupTest() {
 	opr := credential.NewTestAssignProcessor(util.Encoders)
 	t.TestAssignProcessor = opr
-	t.Setup()
+	mockGetter := test.NewMockStateGetter()
+	t.Setup(mockGetter)
 	t.owner = make([]test.Account, 1)
 	t.sender = make([]test.Account, 1)
 	t.contract = make([]test.Account, 1)
@@ -63,7 +64,7 @@ func (t *testAssign) Test01ErrorSenderNotFound() {
 		MakeOperation(t.sender[0].Address(), t.sender[0].Priv(), t.Items()).
 		RunPreProcess()
 
-	if assert.NotNil(t.Suite.T(), err) {
+	if assert.NotNil(t.Suite.T(), err.Error()) {
 		t.Suite.T().Log(err.Error())
 	}
 }

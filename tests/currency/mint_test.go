@@ -30,7 +30,8 @@ type testMint struct {
 func (t *testMint) SetupTest() {
 	opr := currency.NewTestMintProcessor(util.Encoders)
 	t.TestMintProcessor = opr
-	t.Setup()
+	mockGetter := test.NewMockStateGetter()
+	t.Setup(mockGetter)
 	t.receiver = make([]test.Account, 1)
 	t.owner = make([]test.Account, 1)
 	t.currency = make([]types.CurrencyID, 1)
@@ -48,7 +49,7 @@ func (t *testMint) Test01ErrorCurrencyNotFound() {
 		MakeOperation(t.Items()).Print("mint-test.json").
 		RunPreProcess()
 
-	if assert.NotNil(t.Suite.T(), err) {
+	if assert.NotNil(t.Suite.T(), err.Error()) {
 		t.Suite.T().Log(err.Error())
 	}
 }
@@ -62,12 +63,12 @@ func (t *testMint) Test02ErrorReceiverNotExist() {
 		MakeOperation(t.Items()).
 		RunPreProcess()
 
-	if assert.NotNil(t.Suite.T(), err) {
+	if assert.NotNil(t.Suite.T(), err.Error()) {
 		t.Suite.T().Log(err.Error())
 	}
 }
 
-func (t *testMint) Test03ErrorReceiverIscontract() {
+func (t *testMint) Test03ErrorReceiverIsContract() {
 	err := t.Create().
 		SetCurrency("ABC", 10000, t.GenesisAddr, t.currency, true).
 		SetAccount(t.receiverKey, 1000, t.GenesisCurrency, t.owner, true).
@@ -77,7 +78,7 @@ func (t *testMint) Test03ErrorReceiverIscontract() {
 		MakeOperation(t.Items()).
 		RunPreProcess()
 
-	if assert.NotNil(t.Suite.T(), err) {
+	if assert.NotNil(t.Suite.T(), err.Error()) {
 		t.Suite.T().Log(err.Error())
 	}
 }

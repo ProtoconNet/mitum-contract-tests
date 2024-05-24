@@ -37,7 +37,8 @@ type testUpdateOperator struct {
 func (t *testUpdateOperator) SetupTest() {
 	opr := extension.NewTestUpdateOperatorProcessor(util.Encoders)
 	t.TestUpdateOperatorProcessor = opr
-	t.Setup()
+	mockGetter := test.NewMockStateGetter()
+	t.Setup(mockGetter)
 	t.owner = make([]test.Account, 1)
 	t.sender = make([]test.Account, 1)
 	t.sender2 = make([]test.Account, 1)
@@ -60,12 +61,12 @@ func (t *testUpdateOperator) Test01ErrorSenderNotFound() {
 		MakeOperation(t.sender[0].Address(), t.sender[0].Priv(), t.contract[0].Address(), t.operators, t.GenesisCurrency).
 		RunPreProcess()
 
-	if assert.NotNil(t.Suite.T(), err) {
+	if assert.NotNil(t.Suite.T(), err.Error()) {
 		t.Suite.T().Log(err.Error())
 	}
 }
 
-func (t *testUpdateOperator) Test02ErrorSenderIscontract() {
+func (t *testUpdateOperator) Test02ErrorSenderIsContract() {
 	err := t.Create().
 		SetAccount(t.senderKey, 1000, t.GenesisCurrency, t.owner, true).
 		SetContractAccount(t.owner[0].Address(), t.contract1Key, 1000, t.GenesisCurrency, t.sender, true).
@@ -74,7 +75,7 @@ func (t *testUpdateOperator) Test02ErrorSenderIscontract() {
 		MakeOperation(t.sender[0].Address(), t.sender[0].Priv(), t.contract[0].Address(), t.operators, t.GenesisCurrency).
 		RunPreProcess()
 
-	if assert.NotNil(t.Suite.T(), err) {
+	if assert.NotNil(t.Suite.T(), err.Error()) {
 		t.Suite.T().Log(err.Error())
 	}
 }
@@ -87,7 +88,7 @@ func (t *testUpdateOperator) Test03ErrorOperatorNotFound() {
 		MakeOperation(t.sender[0].Address(), t.sender[0].Priv(), t.contract[0].Address(), t.operators, t.GenesisCurrency).
 		RunPreProcess()
 
-	if assert.NotNil(t.Suite.T(), err) {
+	if assert.NotNil(t.Suite.T(), err.Error()) {
 		t.Suite.T().Log(err.Error())
 	}
 }
@@ -100,7 +101,7 @@ func (t *testUpdateOperator) Test04ErrorOperatorIscontract() {
 		MakeOperation(t.sender[0].Address(), t.sender[0].Priv(), t.contract[0].Address(), t.operators, t.GenesisCurrency).
 		RunPreProcess()
 
-	if assert.NotNil(t.Suite.T(), err) {
+	if assert.NotNil(t.Suite.T(), err.Error()) {
 		t.Suite.T().Log(err.Error())
 	}
 }
@@ -114,7 +115,7 @@ func (t *testUpdateOperator) Test05ErrorSender2() {
 		MakeOperation(t.sender[0].Address(), t.sender[0].Priv(), t.contract[0].Address(), t.operators, t.GenesisCurrency).
 		RunPreProcess()
 
-	if assert.NotNil(t.Suite.T(), err) {
+	if assert.NotNil(t.Suite.T(), err.Error()) {
 		t.Suite.T().Log(err.Error())
 	}
 }

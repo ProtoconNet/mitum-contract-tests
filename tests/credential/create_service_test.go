@@ -33,7 +33,8 @@ type testCreateService struct {
 func (t *testCreateService) SetupTest() {
 	opr := credential.NewTestCreateServiceProcessor(util.Encoders)
 	t.TestCreateServiceProcessor = opr
-	t.Setup()
+	mockGetter := test.NewMockStateGetter()
+	t.Setup(mockGetter)
 	t.owner = make([]test.Account, 1)
 	t.sender = make([]test.Account, 1)
 	t.contract = make([]test.Account, 1)
@@ -50,7 +51,7 @@ func (t *testCreateService) Test01ErrorSenderNotFound() {
 		MakeOperation(t.sender[0].Address(), t.sender[0].Priv(), t.contract[0].Address(), t.GenesisCurrency).
 		RunPreProcess()
 
-	if assert.NotNil(t.Suite.T(), err) {
+	if assert.NotNil(t.Suite.T(), err.Error()) {
 		t.Suite.T().Log(err.Error())
 	}
 }
@@ -63,7 +64,7 @@ func (t *testCreateService) Test02ErrorServiceAlreadyExist() {
 		MakeOperation(t.sender[0].Address(), t.sender[0].Priv(), t.contract[0].Address(), t.GenesisCurrency).
 		RunPreProcess()
 
-	if assert.NotNil(t.Suite.T(), err) {
+	if assert.NotNil(t.Suite.T(), err.Error()) {
 		t.Suite.T().Log(err.Error())
 	}
 }

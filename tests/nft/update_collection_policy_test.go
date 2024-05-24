@@ -33,7 +33,8 @@ type testUpdateCollectionPolicy struct {
 func (t *testUpdateCollectionPolicy) SetupTest() {
 	opr := nft.NewTestUpdateCollectionPolicyProcessor(util.Encoders)
 	t.TestUpdateCollectionPolicyProcessor = opr
-	t.Setup()
+	mockGetter := test.NewMockStateGetter()
+	t.Setup(mockGetter)
 	t.owner = make([]test.Account, 1)
 	t.sender = make([]test.Account, 1)
 	t.contract = make([]test.Account, 1)
@@ -55,7 +56,7 @@ func (t *testUpdateCollectionPolicy) Test01ErrorSenderNotFound() {
 		MakeOperation(t.sender[0].Address(), t.sender[0].Priv(), t.contract[0].Address(), t.whitelist, t.GenesisCurrency).
 		RunPreProcess()
 
-	if assert.NotNil(t.Suite.T(), err) {
+	if assert.NotNil(t.Suite.T(), err.Error()) {
 		t.Suite.T().Log(err.Error())
 	}
 }
@@ -69,7 +70,7 @@ func (t *testUpdateCollectionPolicy) Test02ErrorCollectionNotExist() {
 		MakeOperation(t.sender[0].Address(), t.sender[0].Priv(), t.contract[0].Address(), t.whitelist, t.GenesisCurrency).
 		RunPreProcess()
 
-	if assert.NotNil(t.Suite.T(), err) {
+	if assert.NotNil(t.Suite.T(), err.Error()) {
 		t.Suite.T().Log(err.Error())
 	}
 }

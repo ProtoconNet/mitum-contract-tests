@@ -1,4 +1,4 @@
-package credential
+package nft
 
 import (
 	"github.com/ProtoconNet/mitum-contract-tests/tests/util"

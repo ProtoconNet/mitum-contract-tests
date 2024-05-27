@@ -5,8 +5,8 @@ go 1.22.1
 require (
 	github.com/ProtoconNet/mitum-credential v0.0.0-20240524082037-43980c3436fc
 	github.com/ProtoconNet/mitum-currency/v3 v3.0.0-alpha.0.20240524081650-8d48ac82ddc6
-	github.com/ProtoconNet/mitum-nft/v2 v2.0.0-20240524081900-09d996d5b44e
-	github.com/ProtoconNet/mitum-timestamp v0.0.0-20240524081811-12f9b1865ccb
+	github.com/ProtoconNet/mitum-nft/v2 v2.0.0-20240527071852-e9421edb0c0d
+	github.com/ProtoconNet/mitum-timestamp v0.0.0-20240527042650-4c8708cff349
 	github.com/ProtoconNet/mitum2 v0.0.0-20240516232940-9c065b66904b
 	github.com/stretchr/testify v1.9.0
 )

@@ -7,8 +7,10 @@ github.com/ProtoconNet/mitum-currency/v3 v3.0.0-alpha.0.20240524081650-8d48ac82d
 github.com/ProtoconNet/mitum-currency/v3 v3.0.0-alpha.0.20240524081650-8d48ac82ddc6/go.mod h1:VrvEuKanJ6NQG1YDHgWW4oR73g82+Qnp+jAv+UHITdk=
 github.com/ProtoconNet/mitum-nft/v2 v2.0.0-20240524081900-09d996d5b44e h1:FFGY6sI2KqNujlAGpke/UH9snUfzjApzhGTQdW1+MKE=
 github.com/ProtoconNet/mitum-nft/v2 v2.0.0-20240524081900-09d996d5b44e/go.mod h1:4L4WzIWRCimsCaCun7IvDfKA6xchxrBM3kV9r1M7rYg=
+github.com/ProtoconNet/mitum-nft/v2 v2.0.0-20240527071852-e9421edb0c0d/go.mod h1:4L4WzIWRCimsCaCun7IvDfKA6xchxrBM3kV9r1M7rYg=
 github.com/ProtoconNet/mitum-timestamp v0.0.0-20240524081811-12f9b1865ccb h1:o0blYNXuG3+Mud6sobhwZ2XByYwKQaI08yvcvILl66A=
 github.com/ProtoconNet/mitum-timestamp v0.0.0-20240524081811-12f9b1865ccb/go.mod h1:+l+3BOUrGwS6WUjHIxo1RxWlfMrorDPFaCgcilo+kL4=
+github.com/ProtoconNet/mitum-timestamp v0.0.0-20240527042650-4c8708cff349/go.mod h1:+l+3BOUrGwS6WUjHIxo1RxWlfMrorDPFaCgcilo+kL4=
 github.com/ProtoconNet/mitum2 v0.0.0-20240516232940-9c065b66904b h1:/qe9t02SrdqByUqN8BMNy+q0J4ET1PX2fzGsYfKqAuc=
 github.com/ProtoconNet/mitum2 v0.0.0-20240516232940-9c065b66904b/go.mod h1:XhqRo5FN8fY7NfuGp5B+ArTi5S67l2Lv585Gbxg8SZs=
 github.com/aead/siphash v1.0.1/go.mod h1:Nywa3cDsYNNK3gaciGTWPwHt0wlpNV15vwmswBAUSII=

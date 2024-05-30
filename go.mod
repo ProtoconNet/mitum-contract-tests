@@ -3,10 +3,11 @@ module github.com/ProtoconNet/mitum-contract-tests
 go 1.22.1
 
 require (
-	github.com/ProtoconNet/mitum-credential v0.0.0-20240524082037-43980c3436fc
-	github.com/ProtoconNet/mitum-currency/v3 v3.0.0-alpha.0.20240524081650-8d48ac82ddc6
+	github.com/ProtoconNet/mitum-credential v0.0.0-20240530062009-cef55445250e
+	github.com/ProtoconNet/mitum-currency/v3 v3.0.0-alpha.0.20240530054233-ce02158e57bd
 	github.com/ProtoconNet/mitum-nft/v2 v2.0.0-20240527071852-e9421edb0c0d
 	github.com/ProtoconNet/mitum-timestamp v0.0.0-20240527042650-4c8708cff349
+	github.com/ProtoconNet/mitum-token v0.0.0-20240530075722-e0c4b7076627
 	github.com/ProtoconNet/mitum2 v0.0.0-20240516232940-9c065b66904b
 	github.com/stretchr/testify v1.9.0
 )

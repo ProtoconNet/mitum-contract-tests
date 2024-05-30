@@ -1,12 +1,13 @@
-package credentialtest
+package tokentest
 
 import (
 	"github.com/ProtoconNet/mitum-contract-tests/tests/util"
+	"github.com/ProtoconNet/mitum-currency/v3/common"
 	"github.com/ProtoconNet/mitum-currency/v3/operation/test"
 	currencytypes "github.com/ProtoconNet/mitum-currency/v3/types"
 	"testing"
 
-	"github.com/ProtoconNet/mitum-credential/operation/credential"
+	mtoken "github.com/ProtoconNet/mitum-token/operation/token"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 )
@@ -17,51 +18,47 @@ import (
 //t.GenesisAddr  	: genesis account address
 //t.GenesisCurrency : genesis currency
 
-type testAssign struct {
+type testTransferFrom struct {
 	suite.Suite
-	credential.TestAssignProcessor
+	mtoken.TestTransferFromProcessor
 	sender      []test.Account
 	contract    []test.Account
-	holder      []test.Account
+	target      []test.Account
+	receiver    []test.Account
 	currency    []currencytypes.CurrencyID
 	ownerKey    string // Private Key
 	senderKey   string // Private Key
 	contractKey string // Private Key
-	holderKey   string // Private Key
+	targetKey   string // Private Key
+	receiverKey string // Private Key
 	owner       []test.Account
 }
 
-func (t *testAssign) SetupTest() {
-	opr := credential.NewTestAssignProcessor(util.Encoders)
-	t.TestAssignProcessor = opr
+func (t *testTransferFrom) SetupTest() {
+	opr := mtoken.NewTestTransferFromProcessor(util.Encoders)
+	t.TestTransferFromProcessor = opr
 	mockGetter := test.NewMockStateGetter()
 	t.Setup(mockGetter)
 	t.owner = make([]test.Account, 1)
 	t.sender = make([]test.Account, 1)
 	t.contract = make([]test.Account, 1)
-	t.holder = make([]test.Account, 1)
+	t.target = make([]test.Account, 1)
+	t.receiver = make([]test.Account, 1)
 	t.currency = make([]currencytypes.CurrencyID, 1)
 	t.ownerKey = t.NewPrivateKey("owner")
 	t.senderKey = t.NewPrivateKey("sender")
 	t.contractKey = t.NewPrivateKey("contract")
-	t.holderKey = t.NewPrivateKey("holder")
+	t.targetKey = t.NewPrivateKey("target")
+	t.receiverKey = t.NewPrivateKey("receiver")
 }
 
-func (t *testAssign) Test01ErrorSenderNotFound() {
+func (t *testTransferFrom) Test01ErrorSenderNotFound() {
 	err := t.Create().
 		SetAccount(t.senderKey, 1000, t.GenesisCurrency, t.sender, false).
 		SetContractAccount(t.sender[0].Address(), t.contractKey, 1000, t.GenesisCurrency, t.contract, true).
-		SetAccount(t.holderKey, 1000, t.GenesisCurrency, t.holder, true).
-		SetTemplate(
-			"templateID",
-			"id",
-			"value",
-			1000,
-			2000,
-			"did",
-		).
-		MakeItem(t.contract[0], t.holder[0], t.GenesisCurrency, t.Items()).
-		MakeOperation(t.sender[0].Address(), t.sender[0].Priv(), t.Items()).
+		SetAccount(t.receiverKey, 1000, t.GenesisCurrency, t.receiver, true).
+		SetAccount(t.targetKey, 1000, t.GenesisCurrency, t.target, true).
+		MakeOperation(t.sender[0].Address(), t.sender[0].Priv(), t.contract[0].Address(), t.receiver[0].Address(), t.target[0].Address(), common.NewBig(1000), t.GenesisCurrency).
 		RunPreProcess()
 
 	if assert.NotNil(t.Suite.T(), err.Error()) {
@@ -69,6 +66,6 @@ func (t *testAssign) Test01ErrorSenderNotFound() {
 	}
 }
 
-func TestAssign(t *testing.T) {
-	suite.Run(t, new(testAssign))
+func TestTransferFrom(t *testing.T) {
+	suite.Run(t, new(testTransferFrom))
 }

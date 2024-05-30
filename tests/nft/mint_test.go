@@ -1,4 +1,4 @@
-package nft
+package nfttest
 
 import (
 	"github.com/ProtoconNet/mitum-contract-tests/tests/util"

@@ -1,4 +1,4 @@
-package currency
+package currencytest
 
 import (
 	"github.com/ProtoconNet/mitum-contract-tests/tests/util"

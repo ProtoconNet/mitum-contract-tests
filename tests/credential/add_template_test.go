@@ -1,4 +1,4 @@
-package credential
+package credentialtest
 
 import (
 	"github.com/ProtoconNet/mitum-contract-tests/tests/util"

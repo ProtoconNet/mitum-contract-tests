@@ -1,4 +1,4 @@
-package timestamp
+package timestamptest
 
 import (
 	"github.com/ProtoconNet/mitum-contract-tests/tests/util"

@@ -6,7 +6,8 @@ require (
 	github.com/ProtoconNet/mitum-credential v0.0.0-20240530062009-cef55445250e
 	github.com/ProtoconNet/mitum-currency/v3 v3.0.0-alpha.0.20240530054233-ce02158e57bd
 	github.com/ProtoconNet/mitum-nft/v2 v2.0.0-20240527071852-e9421edb0c0d
-	github.com/ProtoconNet/mitum-timestamp v0.0.0-20240527042650-4c8708cff349
+	github.com/ProtoconNet/mitum-point v0.0.0-20240530082646-887cd13b9fe5
+	github.com/ProtoconNet/mitum-timestamp v0.0.0-20240530092605-225b2fd91c3c
 	github.com/ProtoconNet/mitum-token v0.0.0-20240530075722-e0c4b7076627
 	github.com/ProtoconNet/mitum2 v0.0.0-20240516232940-9c065b66904b
 	github.com/stretchr/testify v1.9.0

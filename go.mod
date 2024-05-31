@@ -10,6 +10,7 @@ require (
 	github.com/ProtoconNet/mitum-timestamp v0.0.0-20240530092605-225b2fd91c3c
 	github.com/ProtoconNet/mitum-token v0.0.0-20240530075722-e0c4b7076627
 	github.com/ProtoconNet/mitum2 v0.0.0-20240516232940-9c065b66904b
+	github.com/ProtoconNet/mitum-dao v0.0.0-20240531073459-9cba829b142f
 	github.com/stretchr/testify v1.9.0
 )
 

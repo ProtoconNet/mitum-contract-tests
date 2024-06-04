@@ -33,8 +33,8 @@ type testMint struct {
 }
 
 func (t *testMint) SetupTest() {
-	opr := mtoken.NewTestMintProcessor(util.Encoders)
-	t.TestMintProcessor = opr
+	tp := test.TestProcessor{Encoders: util.Encoders}
+	t.TestMintProcessor = mtoken.NewTestMintProcessor(&tp)
 	mockGetter := test.NewMockStateGetter()
 	t.Setup(mockGetter)
 	t.owner = make([]test.Account, 1)
@@ -53,7 +53,8 @@ func (t *testMint) Test01ErrorSenderNotFound() {
 		SetAccount(t.senderKey, 1000, t.GenesisCurrency, t.sender, false).
 		SetContractAccount(t.sender[0].Address(), t.contractKey, 1000, t.GenesisCurrency, t.contract, true).
 		SetAccount(t.targetKey, 1000, t.GenesisCurrency, t.target, true).
-		MakeOperation(t.sender[0].Address(), t.sender[0].Priv(), t.contract[0].Address(), t.target[0].Address(), common.NewBig(1000), t.GenesisCurrency).
+		MakeOperation(t.sender[0].Address(), t.sender[0].Priv(), t.contract[0].Address(),
+			t.target[0].Address(), common.NewBig(1000), t.GenesisCurrency).
 		RunPreProcess()
 
 	if assert.NotNil(t.Suite.T(), err.Error()) {

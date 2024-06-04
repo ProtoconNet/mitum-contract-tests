@@ -36,8 +36,8 @@ type testCreateDAO struct {
 }
 
 func (t *testCreateDAO) SetupTest() {
-	opr := dao.NewTestCreateDAOProcessor(util.Encoders)
-	t.TestCreateDAOProcessor = opr
+	tp := test.TestProcessor{Encoders: util.Encoders}
+	t.TestCreateDAOProcessor = dao.NewTestCreateDAOProcessor(&tp)
 	mockGetter := test.NewMockStateGetter()
 	t.Setup(mockGetter)
 	t.owner = make([]test.Account, 1)

@@ -28,9 +28,11 @@ type testMint struct {
 }
 
 func (t *testMint) SetupTest() {
-	opr := currency.NewTestMintProcessor(util.Encoders)
-	t.TestMintProcessor = opr
+	tp := test.TestProcessor{Encoders: util.Encoders}
 	mockGetter := test.NewMockStateGetter()
+	t.Setup(mockGetter)
+	opr := currency.NewTestMintProcessor(&tp)
+	t.TestMintProcessor = opr
 	t.Setup(mockGetter)
 	t.receiver = make([]test.Account, 1)
 	t.owner = make([]test.Account, 1)

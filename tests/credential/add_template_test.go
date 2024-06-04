@@ -33,7 +33,8 @@ type testAddTemplate struct {
 }
 
 func (t *testAddTemplate) SetupTest() {
-	opr := credential.NewTestAddTemplateProcessor(util.Encoders)
+	tp := test.TestProcessor{Encoders: util.Encoders}
+	opr := credential.NewTestAddTemplateProcessor(&tp)
 	t.TestAddTemplateProcessor = opr
 	mockGetter := test.NewMockStateGetter()
 	t.Setup(mockGetter)

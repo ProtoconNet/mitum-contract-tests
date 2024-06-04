@@ -32,7 +32,8 @@ type testAssign struct {
 }
 
 func (t *testAssign) SetupTest() {
-	opr := credential.NewTestAssignProcessor(util.Encoders)
+	tp := test.TestProcessor{Encoders: util.Encoders}
+	opr := credential.NewTestAssignProcessor(&tp)
 	t.TestAssignProcessor = opr
 	mockGetter := test.NewMockStateGetter()
 	t.Setup(mockGetter)

@@ -34,8 +34,8 @@ type testCancelProposal struct {
 }
 
 func (t *testCancelProposal) SetupTest() {
-	opr := dao.NewTestCancelProposalProcessor(util.Encoders)
-	t.TestCancelProposalProcessor = opr
+	tp := test.TestProcessor{Encoders: util.Encoders}
+	t.TestCancelProposalProcessor = dao.NewTestCancelProposalProcessor(&tp)
 	mockGetter := test.NewMockStateGetter()
 	t.Setup(mockGetter)
 	t.owner = make([]test.Account, 1)

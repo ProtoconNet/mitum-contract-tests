@@ -34,7 +34,8 @@ type testPreSnap struct {
 }
 
 func (t *testPreSnap) SetupTest() {
-	opr := dao.NewTestPreSnapProcessor(util.Encoders)
+	tp := test.TestProcessor{Encoders: util.Encoders}
+	opr := dao.NewTestPreSnapProcessor(&tp)
 	t.TestPreSnapProcessor = opr
 	mockGetter := test.NewMockStateGetter()
 	t.Setup(mockGetter)

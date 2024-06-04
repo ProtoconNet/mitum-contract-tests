@@ -29,10 +29,11 @@ type testUpdateKey struct {
 }
 
 func (t *testUpdateKey) SetupTest() {
-	opr := currency.NewTestUpdateKeyProcessor(util.Encoders)
-	t.TestUpdateKeyProcessor = opr
+	tp := test.TestProcessor{Encoders: util.Encoders}
 	mockGetter := test.NewMockStateGetter()
 	t.Setup(mockGetter)
+	opr := currency.NewTestUpdateKeyProcessor(&tp)
+	t.TestUpdateKeyProcessor = opr
 	t.owner = make([]test.Account, 1)
 	t.sender = make([]test.Account, 1)
 	t.target = make([]test.Account, 1)

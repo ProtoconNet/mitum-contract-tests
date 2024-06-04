@@ -30,10 +30,11 @@ type testCreateAccount struct {
 }
 
 func (t *testCreateAccount) SetupTest() {
-	opr := currency.NewTestCreateAccountProcessor(util.Encoders)
-	t.TestCreateAccountProcessor = opr
+	tp := test.TestProcessor{Encoders: util.Encoders}
 	mockGetter := test.NewMockStateGetter()
 	t.Setup(mockGetter)
+	opr := currency.NewTestCreateAccountProcessor(&tp)
+	t.TestCreateAccountProcessor = opr
 	t.owner = make([]test.Account, 1)
 	t.sender = make([]test.Account, 1)
 	t.target = make([]test.Account, 1)

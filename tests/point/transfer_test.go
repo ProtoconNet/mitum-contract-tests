@@ -33,7 +33,8 @@ type testTransfer struct {
 }
 
 func (t *testTransfer) SetupTest() {
-	opr := mpoint.NewTestTransferProcessor(util.Encoders)
+	tp := test.TestProcessor{Encoders: util.Encoders}
+	opr := mpoint.NewTestTransferProcessor(&tp)
 	t.TestTransferProcessor = opr
 	mockGetter := test.NewMockStateGetter()
 	t.Setup(mockGetter)

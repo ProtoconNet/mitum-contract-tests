@@ -34,7 +34,8 @@ type testWithdrawOperator struct {
 }
 
 func (t *testWithdrawOperator) SetupTest() {
-	opr := extension.NewTestWithdrawProcessor(util.Encoders)
+	tp := test.TestProcessor{Encoders: util.Encoders}
+	opr := extension.NewTestWithdrawProcessor(&tp)
 	t.TestWithdrawProcessor = opr
 	mockGetter := test.NewMockStateGetter()
 	t.Setup(mockGetter)

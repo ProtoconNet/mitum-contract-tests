@@ -34,7 +34,8 @@ type testVote struct {
 }
 
 func (t *testVote) SetupTest() {
-	opr := dao.NewTestVoteProcessor(util.Encoders)
+	tp := test.TestProcessor{Encoders: util.Encoders}
+	opr := dao.NewTestVoteProcessor(&tp)
 	t.TestVoteProcessor = opr
 	mockGetter := test.NewMockStateGetter()
 	t.Setup(mockGetter)

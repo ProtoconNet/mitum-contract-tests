@@ -35,7 +35,8 @@ type testPropose struct {
 }
 
 func (t *testPropose) SetupTest() {
-	opr := dao.NewTestProposeProcessor(util.Encoders)
+	tp := test.TestProcessor{Encoders: util.Encoders}
+	opr := dao.NewTestProposeProcessor(&tp)
 	t.TestProposeProcessor = opr
 	mockGetter := test.NewMockStateGetter()
 	t.Setup(mockGetter)

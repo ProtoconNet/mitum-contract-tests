@@ -34,7 +34,8 @@ type testPostSnap struct {
 }
 
 func (t *testPostSnap) SetupTest() {
-	opr := dao.NewTestPostSnapProcessor(util.Encoders)
+	tp := test.TestProcessor{Encoders: util.Encoders}
+	opr := dao.NewTestPostSnapProcessor(&tp)
 	t.TestPostSnapProcessor = opr
 	mockGetter := test.NewMockStateGetter()
 	t.Setup(mockGetter)

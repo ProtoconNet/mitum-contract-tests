@@ -36,7 +36,8 @@ type testUpdatePolicy struct {
 }
 
 func (t *testUpdatePolicy) SetupTest() {
-	opr := dao.NewTestUpdatePolicyProcessor(util.Encoders)
+	tp := test.TestProcessor{Encoders: util.Encoders}
+	opr := dao.NewTestUpdatePolicyProcessor(&tp)
 	t.TestUpdatePolicyProcessor = opr
 	mockGetter := test.NewMockStateGetter()
 	t.Setup(mockGetter)

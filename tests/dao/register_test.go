@@ -34,7 +34,8 @@ type testRegister struct {
 }
 
 func (t *testRegister) SetupTest() {
-	opr := dao.NewTestRegisterProcessor(util.Encoders)
+	tp := test.TestProcessor{Encoders: util.Encoders}
+	opr := dao.NewTestRegisterProcessor(&tp)
 	t.TestRegisterProcessor = opr
 	mockGetter := test.NewMockStateGetter()
 	t.Setup(mockGetter)

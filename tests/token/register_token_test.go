@@ -33,8 +33,8 @@ type testRegisterToken struct {
 }
 
 func (t *testRegisterToken) SetupTest() {
-	opr := mtoken.NewTestRegisterTokenProcessor(util.Encoders)
-	t.TestRegisterTokenProcessor = opr
+	tp := test.TestProcessor{Encoders: util.Encoders}
+	t.TestRegisterTokenProcessor = mtoken.NewTestRegisterTokenProcessor(&tp)
 	mockGetter := test.NewMockStateGetter()
 	t.Setup(mockGetter)
 	t.owner = make([]test.Account, 1)
@@ -46,6 +46,16 @@ func (t *testRegisterToken) SetupTest() {
 	t.senderKey = t.NewPrivateKey("sender")
 	t.contractKey = t.NewPrivateKey("contract")
 	t.targetKey = t.NewPrivateKey("target")
+}
+
+func (t *testRegisterToken) RegisterToken() {
+	t.Create().
+		SetAccount(t.senderKey, 1000, t.GenesisCurrency, t.sender, true).
+		SetContractAccount(t.sender[0].Address(), t.contractKey, 1000, t.GenesisCurrency, t.contract, true).
+		SetAccount(t.targetKey, 1000, t.GenesisCurrency, t.target, true).
+		MakeOperation(t.sender[0].Address(), t.sender[0].Priv(), t.contract[0].Address(),
+			"token_symbol", "token_name", common.NewBig(1000), t.GenesisCurrency).
+		RunPreProcess().RunProcess()
 }
 
 func (t *testRegisterToken) Test01ErrorSenderNotFound() {

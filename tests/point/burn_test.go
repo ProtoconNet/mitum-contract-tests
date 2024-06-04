@@ -33,7 +33,8 @@ type testBurn struct {
 }
 
 func (t *testBurn) SetupTest() {
-	opr := mpoint.NewTestBurnProcessor(util.Encoders)
+	tp := test.TestProcessor{Encoders: util.Encoders}
+	opr := mpoint.NewTestBurnProcessor(&tp)
 	t.TestBurnProcessor = opr
 	mockGetter := test.NewMockStateGetter()
 	t.Setup(mockGetter)

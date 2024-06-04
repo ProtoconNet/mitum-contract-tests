@@ -2,7 +2,6 @@ package tokentest
 
 import (
 	"github.com/ProtoconNet/mitum-contract-tests/tests/util"
-	"github.com/ProtoconNet/mitum-currency/v3/common"
 	"github.com/ProtoconNet/mitum-currency/v3/operation/test"
 	currencytypes "github.com/ProtoconNet/mitum-currency/v3/types"
 	"testing"
@@ -33,8 +32,8 @@ type testBurn struct {
 }
 
 func (t *testBurn) SetupTest() {
-	opr := mtoken.NewTestBurnProcessor(util.Encoders)
-	t.TestBurnProcessor = opr
+	tp := test.TestProcessor{Encoders: util.Encoders}
+	t.TestBurnProcessor = mtoken.NewTestBurnProcessor(&tp)
 	mockGetter := test.NewMockStateGetter()
 	t.Setup(mockGetter)
 	t.owner = make([]test.Account, 1)
@@ -53,7 +52,8 @@ func (t *testBurn) Test01ErrorSenderNotFound() {
 		SetAccount(t.senderKey, 1000, t.GenesisCurrency, t.sender, false).
 		SetContractAccount(t.sender[0].Address(), t.contractKey, 1000, t.GenesisCurrency, t.contract, true).
 		SetAccount(t.targetKey, 1000, t.GenesisCurrency, t.target, true).
-		MakeOperation(t.sender[0].Address(), t.sender[0].Priv(), t.contract[0].Address(), t.target[0].Address(), common.NewBig(1000), t.GenesisCurrency).
+		MakeOperation(t.sender[0].Address(), t.sender[0].Priv(), t.contract[0].Address(),
+			t.target[0].Address(), 1000, t.GenesisCurrency).
 		RunPreProcess()
 
 	if assert.NotNil(t.Suite.T(), err.Error()) {

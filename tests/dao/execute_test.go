@@ -34,8 +34,8 @@ type testExecute struct {
 }
 
 func (t *testExecute) SetupTest() {
-	opr := dao.NewTestExecuteProcessor(util.Encoders)
-	t.TestExecuteProcessor = opr
+	tp := test.TestProcessor{Encoders: util.Encoders}
+	t.TestExecuteProcessor = dao.NewTestExecuteProcessor(&tp)
 	mockGetter := test.NewMockStateGetter()
 	t.Setup(mockGetter)
 	t.owner = make([]test.Account, 1)

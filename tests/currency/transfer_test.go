@@ -31,10 +31,11 @@ type testTransfer struct {
 }
 
 func (t *testTransfer) SetupTest() {
-	opr := currency.NewTestTransferProcessor(util.Encoders)
-	t.TestTransferProcessor = opr
+	tp := test.TestProcessor{Encoders: util.Encoders}
 	mockGetter := test.NewMockStateGetter()
 	t.Setup(mockGetter)
+	opr := currency.NewTestTransferProcessor(&tp)
+	t.TestTransferProcessor = opr
 	t.owner = make([]test.Account, 1)
 	t.sender = make([]test.Account, 1)
 	t.receiver = make([]test.Account, 1)

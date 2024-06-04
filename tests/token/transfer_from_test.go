@@ -35,8 +35,8 @@ type testTransferFrom struct {
 }
 
 func (t *testTransferFrom) SetupTest() {
-	opr := mtoken.NewTestTransferFromProcessor(util.Encoders)
-	t.TestTransferFromProcessor = opr
+	tp := test.TestProcessor{Encoders: util.Encoders}
+	t.TestTransferFromProcessor = mtoken.NewTestTransferFromProcessor(&tp)
 	mockGetter := test.NewMockStateGetter()
 	t.Setup(mockGetter)
 	t.owner = make([]test.Account, 1)
@@ -58,7 +58,8 @@ func (t *testTransferFrom) Test01ErrorSenderNotFound() {
 		SetContractAccount(t.sender[0].Address(), t.contractKey, 1000, t.GenesisCurrency, t.contract, true).
 		SetAccount(t.receiverKey, 1000, t.GenesisCurrency, t.receiver, true).
 		SetAccount(t.targetKey, 1000, t.GenesisCurrency, t.target, true).
-		MakeOperation(t.sender[0].Address(), t.sender[0].Priv(), t.contract[0].Address(), t.receiver[0].Address(), t.target[0].Address(), common.NewBig(1000), t.GenesisCurrency).
+		MakeOperation(t.sender[0].Address(), t.sender[0].Priv(), t.contract[0].Address(),
+			t.receiver[0].Address(), t.target[0].Address(), common.NewBig(1000), t.GenesisCurrency).
 		RunPreProcess()
 
 	if assert.NotNil(t.Suite.T(), err.Error()) {

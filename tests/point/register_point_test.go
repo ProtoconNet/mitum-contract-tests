@@ -33,7 +33,8 @@ type testRegisterPoint struct {
 }
 
 func (t *testRegisterPoint) SetupTest() {
-	opr := mpoint.NewTestRegisterPointProcessor(util.Encoders)
+	tp := test.TestProcessor{Encoders: util.Encoders}
+	opr := mpoint.NewTestRegisterPointProcessor(&tp)
 	t.TestRegisterPointProcessor = opr
 	mockGetter := test.NewMockStateGetter()
 	t.Setup(mockGetter)

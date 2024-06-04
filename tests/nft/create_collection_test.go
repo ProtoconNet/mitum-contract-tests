@@ -4,7 +4,7 @@ import (
 	"github.com/ProtoconNet/mitum-contract-tests/tests/util"
 	"github.com/ProtoconNet/mitum-currency/v3/operation/test"
 	currencytypes "github.com/ProtoconNet/mitum-currency/v3/types"
-	"github.com/ProtoconNet/mitum-nft/v2/operation/nft"
+	"github.com/ProtoconNet/mitum-nft/operation/nft"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 	"testing"
@@ -31,7 +31,8 @@ type testCreateCollection struct {
 }
 
 func (t *testCreateCollection) SetupTest() {
-	opr := nft.NewTestCreateCollectionProcessor(util.Encoders)
+	tp := test.TestProcessor{Encoders: util.Encoders}
+	opr := nft.NewTestCreateCollectionProcessor(&tp)
 	t.TestCreateCollectionProcessor = opr
 	mockGetter := test.NewMockStateGetter()
 	t.Setup(mockGetter)

@@ -31,7 +31,8 @@ type testCreateContractAccount struct {
 }
 
 func (t *testCreateContractAccount) SetupTest() {
-	opr := extension.NewTestCreateContractAccountProcessor(util.Encoders)
+	tp := test.TestProcessor{Encoders: util.Encoders}
+	opr := extension.NewTestCreateContractAccountProcessor(&tp)
 	t.TestCreateContractAccountProcessor = opr
 	mockGetter := test.NewMockStateGetter()
 	t.Setup(mockGetter)

@@ -33,7 +33,8 @@ type testMint struct {
 }
 
 func (t *testMint) SetupTest() {
-	opr := mpoint.NewTestMintProcessor(util.Encoders)
+	tp := test.TestProcessor{Encoders: util.Encoders}
+	opr := mpoint.NewTestMintProcessor(&tp)
 	t.TestMintProcessor = opr
 	mockGetter := test.NewMockStateGetter()
 	t.Setup(mockGetter)

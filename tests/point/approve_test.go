@@ -2,7 +2,6 @@ package pointtest
 
 import (
 	"github.com/ProtoconNet/mitum-contract-tests/tests/util"
-	"github.com/ProtoconNet/mitum-currency/v3/common"
 	"github.com/ProtoconNet/mitum-currency/v3/operation/test"
 	currencytypes "github.com/ProtoconNet/mitum-currency/v3/types"
 	"testing"
@@ -33,7 +32,8 @@ type testApprove struct {
 }
 
 func (t *testApprove) SetupTest() {
-	opr := mpoint.NewTestApproveProcessor(util.Encoders)
+	tp := test.TestProcessor{Encoders: util.Encoders}
+	opr := mpoint.NewTestApproveProcessor(&tp)
 	t.TestApproveProcessor = opr
 	mockGetter := test.NewMockStateGetter()
 	t.Setup(mockGetter)
@@ -53,7 +53,8 @@ func (t *testApprove) Test01ErrorSenderNotFound() {
 		SetAccount(t.senderKey, 1000, t.GenesisCurrency, t.sender, false).
 		SetContractAccount(t.sender[0].Address(), t.contractKey, 1000, t.GenesisCurrency, t.contract, true).
 		SetAccount(t.approvedKey, 1000, t.GenesisCurrency, t.approved, true).
-		MakeOperation(t.sender[0].Address(), t.sender[0].Priv(), t.contract[0].Address(), t.approved[0].Address(), common.NewBig(1000), t.GenesisCurrency).
+		MakeOperation(t.sender[0].Address(), t.sender[0].Priv(), t.contract[0].Address(),
+			t.approved[0].Address(), 1000, t.GenesisCurrency).
 		RunPreProcess()
 
 	if assert.NotNil(t.Suite.T(), err.Error()) {

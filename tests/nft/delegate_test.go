@@ -4,8 +4,8 @@ import (
 	"github.com/ProtoconNet/mitum-contract-tests/tests/util"
 	"github.com/ProtoconNet/mitum-currency/v3/operation/test"
 	currencytypes "github.com/ProtoconNet/mitum-currency/v3/types"
-	"github.com/ProtoconNet/mitum-nft/v2/operation/nft"
-	nfttypes "github.com/ProtoconNet/mitum-nft/v2/types"
+	"github.com/ProtoconNet/mitum-nft/operation/nft"
+	nfttypes "github.com/ProtoconNet/mitum-nft/types"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 	"testing"
@@ -36,7 +36,8 @@ type testDelegate struct {
 }
 
 func (t *testDelegate) SetupTest() {
-	opr := nft.NewTestDelegateProcessor(util.Encoders)
+	tp := test.TestProcessor{Encoders: util.Encoders}
+	opr := nft.NewTestDelegateProcessor(&tp)
 	t.TestDelegateProcessor = opr
 	mockGetter := test.NewMockStateGetter()
 	t.Setup(mockGetter)
@@ -64,7 +65,7 @@ func (t *testDelegate) Test01ErrorSenderNotFound() {
 		SetDesign("abd collection", 10, "example.com").
 		SetService(t.sender[0].Address(), t.contract[0].Address(), t.whitelist).
 		SetSigner(t.sender[0], 10, false, t.signer).
-		SetSigners(10, t.signer, t.signers).
+		SetSigners(t.signer, t.signers).
 		SetNFT(t.contract[0].Address(), t.sender[0].Address(), "hash", "example.com", t.signers[0]).
 		MakeItem(t.contract[0], t.delegatee[0], nft.DelegateAllow, t.GenesisCurrency, t.Items()).
 		MakeOperation(t.sender[0].Address(), t.sender[0].Priv(), t.Items()).

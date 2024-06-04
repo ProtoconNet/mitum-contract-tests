@@ -35,7 +35,8 @@ type testUpdateOperator struct {
 }
 
 func (t *testUpdateOperator) SetupTest() {
-	opr := extension.NewTestUpdateOperatorProcessor(util.Encoders)
+	tp := test.TestProcessor{Encoders: util.Encoders}
+	opr := extension.NewTestUpdateOperatorProcessor(&tp)
 	t.TestUpdateOperatorProcessor = opr
 	mockGetter := test.NewMockStateGetter()
 	t.Setup(mockGetter)

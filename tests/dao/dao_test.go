@@ -76,7 +76,7 @@ func (t *testDAO) SetupTest() {
 }
 
 func (t *testDAO) CreateDAO() {
-	t.createDAO.Create(t.blockMap).
+	t.createDAO.Create().
 		SetAccount(t.senderKey, 1000, t.GenesisCurrency, t.sender, true).
 		SetCurrency("ABC", 100000, t.sender[0].Address(), t.currency, true).
 		SetContractAccount(t.sender[0].Address(), t.contractKey, 1000, t.GenesisCurrency, t.contract, true).
@@ -86,14 +86,14 @@ func (t *testDAO) CreateDAO() {
 			currencytypes.NewAmount(common.NewBig(10), t.GenesisCurrency), 10000, 10000,
 			10000, 10000, 10000, 10000, 3, 3).
 		MakeOperation(t.sender[0].Address(), t.sender[0].Priv(),
-			t.contract[0].Address(), "proposalID", t.proposal[0], t.GenesisCurrency).
+			t.contract[0].Address(), t.GenesisCurrency).
 		RunPreProcess().
 		RunProcess()
 }
 
 func (t *testDAO) CancelProposal(blockTime int64) {
 	t.cancelProposal.Create(t.blockMap).
-		SetAccount(t.senderKey, 1000, t.GenesisCurrency, t.sender, false).
+		SetAccount(t.senderKey, 1000, t.GenesisCurrency, t.sender, true).
 		SetAccount(t.delegatedKey, 1000, t.GenesisCurrency, t.delegated, true).
 		SetBlockMap(blockTime, t.blockMap).
 		MakeOperation(t.sender[0].Address(), t.sender[0].Priv(),
@@ -115,7 +115,7 @@ func (t *testDAO) Execute(blockTime int64) {
 
 func (t *testDAO) PostSnap(blockTime int64) {
 	t.postSnap.Create(t.blockMap).
-		SetAccount(t.senderKey, 1000, t.GenesisCurrency, t.sender, false).
+		SetAccount(t.senderKey, 1000, t.GenesisCurrency, t.sender, true).
 		SetBlockMap(blockTime, t.blockMap).
 		MakeOperation(t.sender[0].Address(), t.sender[0].Priv(),
 			t.contract[0].Address(), "proposalID", t.GenesisCurrency).
@@ -125,7 +125,7 @@ func (t *testDAO) PostSnap(blockTime int64) {
 
 func (t *testDAO) PreSnap(blockTime int64) {
 	t.preSnap.Create(t.blockMap).
-		SetAccount(t.senderKey, 1000, t.GenesisCurrency, t.sender, false).
+		SetAccount(t.senderKey, 1000, t.GenesisCurrency, t.sender, true).
 		SetAccount(t.delegatedKey, 1000, t.GenesisCurrency, t.delegated, true).
 		SetBlockMap(blockTime, t.blockMap).
 		MakeOperation(t.sender[0].Address(), t.sender[0].Priv(),
@@ -135,9 +135,9 @@ func (t *testDAO) PreSnap(blockTime int64) {
 }
 
 func (t *testDAO) Propose(blockTime int64) {
-	t.propose.Create(t.blockMap).
+	t.propose.Create().
 		SetAccount(t.senderKey, 1000, t.GenesisCurrency, t.sender, true).
-		SetBlockMap(blockTime, t.blockMap).
+		SetBlockMap(1000, t.blockMap).
 		SetProposal(t.sender[0].Address(), uint64(blockTime), "example.com", "hash", 4, t.proposal).
 		MakeOperation(t.sender[0].Address(), t.sender[0].Priv(),
 			t.contract[0].Address(), "proposalID", t.proposal[0], t.GenesisCurrency).
@@ -147,7 +147,7 @@ func (t *testDAO) Propose(blockTime int64) {
 
 func (t *testDAO) Register(blockTime int64) {
 	t.register.Create(t.blockMap).
-		SetAccount(t.senderKey, 1000, t.GenesisCurrency, t.sender, false).
+		SetAccount(t.senderKey, 1000, t.GenesisCurrency, t.sender, true).
 		SetAccount(t.delegatedKey, 1000, t.GenesisCurrency, t.delegated, true).
 		SetBlockMap(blockTime, t.blockMap).
 		MakeOperation(t.sender[0].Address(), t.sender[0].Priv(),
@@ -157,8 +157,8 @@ func (t *testDAO) Register(blockTime int64) {
 }
 
 func (t *testDAO) UpdatePolicy(blockTime int64) {
-	t.updatePolicy.Create(t.blockMap).
-		SetAccount(t.senderKey, 1000, t.GenesisCurrency, t.sender, false).
+	t.updatePolicy.Create().
+		SetAccount(t.senderKey, 1000, t.GenesisCurrency, t.sender, true).
 		SetCurrency("ABC", 100000, t.sender[0].Address(), t.currency, true).
 		SetAccount(t.whitelistKey, 1000, t.currency[0], t.whitelist, true).
 		SetBlockMap(blockTime, t.blockMap).
@@ -167,7 +167,7 @@ func (t *testDAO) UpdatePolicy(blockTime int64) {
 			currencytypes.NewAmount(common.NewBig(10), t.GenesisCurrency), 10000, 10000,
 			10000, 10000, 10000, 10000, 3, 3).
 		MakeOperation(t.sender[0].Address(), t.sender[0].Priv(),
-			t.contract[0].Address(), "proposalID", t.proposal[0], t.GenesisCurrency).
+			t.contract[0].Address(), t.GenesisCurrency).
 		RunPreProcess().
 		RunProcess()
 }
@@ -192,11 +192,11 @@ func (t *testDAO) Test01Error() {
 	t.Execute(70000)
 
 	t.cancelProposal.Create(t.blockMap).
-		SetAccount(t.senderKey, 1000, t.GenesisCurrency, t.sender, false).
+		SetAccount(t.senderKey, 1000, t.GenesisCurrency, t.sender, true).
 		SetBlockMap(00000, t.blockMap).
 		MakeOperation(t.sender[0].Address(), t.sender[0].Priv(),
 			t.contract[0].Address(), "proposalID", t.GenesisCurrency).
-		RunPreProcess()
+		IsValid()
 
 	if assert.NotNil(t.Suite.T(), t.Error()) {
 		t.Suite.T().Log(t.Error().Error())

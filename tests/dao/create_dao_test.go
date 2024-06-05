@@ -54,7 +54,7 @@ func (t *testCreateDAO) SetupTest() {
 }
 
 func (t *testCreateDAO) Test01ErrorSenderNotFound() {
-	err := t.Create(t.blockMap).
+	err := t.Create().
 		SetAccount(t.senderKey, 1000, t.GenesisCurrency, t.sender, false).
 		SetCurrency("ABC", 100000, t.sender[0].Address(), t.currency, true).
 		SetContractAccount(t.sender[0].Address(), t.contractKey, 1000, t.GenesisCurrency, t.contract, true).
@@ -65,7 +65,7 @@ func (t *testCreateDAO) Test01ErrorSenderNotFound() {
 			currencytypes.NewAmount(common.NewBig(10), t.GenesisCurrency), 10000, 10000,
 			10000, 10000, 10000, 10000, 3, 3).
 		MakeOperation(t.sender[0].Address(), t.sender[0].Priv(),
-			t.contract[0].Address(), "proposalID", t.proposal[0], t.GenesisCurrency).
+			t.contract[0].Address(), t.GenesisCurrency).
 		RunPreProcess()
 
 	if assert.NotNil(t.Suite.T(), err.Error()) {

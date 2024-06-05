@@ -54,7 +54,7 @@ func (t *testPropose) SetupTest() {
 }
 
 func (t *testPropose) Test01ErrorSenderNotFound() {
-	err := t.Create(t.blockMap).
+	err := t.Create().
 		SetAccount(t.senderKey, 1000, t.GenesisCurrency, t.sender, false).
 		SetContractAccount(t.sender[0].Address(), t.contractKey, 1000, t.GenesisCurrency, t.contract, true).
 		SetAccount(t.creatorKey, 1000, t.GenesisCurrency, t.creator, true).

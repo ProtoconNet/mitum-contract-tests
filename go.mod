@@ -4,12 +4,12 @@ go 1.22.1
 
 require (
 	github.com/ProtoconNet/mitum-credential v0.0.0-20240604143925-d0e925165c10
-	github.com/ProtoconNet/mitum-currency/v3 v3.0.0-alpha.0.20240604081749-80bea0da48e9
+	github.com/ProtoconNet/mitum-currency/v3 v3.0.0-alpha.0.20240605080414-2052cf0ea262
 	github.com/ProtoconNet/mitum-dao v0.0.0-20240605015335-0a6d8e37c89a
 	github.com/ProtoconNet/mitum-nft v0.0.0-20240604132031-7806ea892dea
 	github.com/ProtoconNet/mitum-point v0.0.0-20240604125232-e08326fa0353
 	github.com/ProtoconNet/mitum-timestamp v0.0.0-20240604143748-8b03e7f80a59
-	github.com/ProtoconNet/mitum-token v0.0.0-20240604082627-7419d88d5ab0
+	github.com/ProtoconNet/mitum-token v0.0.0-20240605082518-85472f38217e
 	github.com/ProtoconNet/mitum2 v0.0.0-20240516232940-9c065b66904b
 	github.com/stretchr/testify v1.9.0
 )

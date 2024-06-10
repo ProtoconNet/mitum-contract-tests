@@ -184,19 +184,28 @@ func (t *testDAO) Vote(blockTime int64) {
 
 func (t *testDAO) Test01Error() {
 	t.CreateDAO()
-	t.Propose(10000)
-	t.Register(20000)
-	t.PreSnap(30000)
-	t.Vote(40000)
-	t.PostSnap(50000)
-	t.Execute(70000)
 
-	t.cancelProposal.Create(t.blockMap).
-		SetAccount(t.senderKey, 1000, t.GenesisCurrency, t.sender, true).
-		SetBlockMap(00000, t.blockMap).
+	t.createDAO.Create().
+		SetDAO("biz", t.currency[0], common.NewBig(100),
+			currencytypes.NewAmount(common.NewBig(10), t.GenesisCurrency), 10000, 10000,
+			10000, 10000, 10000, 10000, 3, 3).
 		MakeOperation(t.sender[0].Address(), t.sender[0].Priv(),
-			t.contract[0].Address(), "proposalID", t.GenesisCurrency).
-		IsValid()
+			t.contract[0].Address(), t.GenesisCurrency).
+		RunPreProcess()
+
+	//t.Propose(10000)
+	//t.Register(20000)
+	//t.PreSnap(30000)
+	//t.Vote(40000)
+	//t.PostSnap(50000)
+	//t.Execute(70000)
+	//
+	//t.cancelProposal.Create(t.blockMap).
+	//	SetAccount(t.senderKey, 1000, t.GenesisCurrency, t.sender, true).
+	//	SetBlockMap(00000, t.blockMap).
+	//	MakeOperation(t.sender[0].Address(), t.sender[0].Priv(),
+	//		t.contract[0].Address(), "proposalID", t.GenesisCurrency).
+	//	IsValid()
 
 	if assert.NotNil(t.Suite.T(), t.Error()) {
 		t.Suite.T().Log(t.Error().Error())

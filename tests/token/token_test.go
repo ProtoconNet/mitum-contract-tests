@@ -28,6 +28,7 @@ type testToken struct {
 	transfer      token.TestTransferProcessor
 	sender        []test.Account
 	contract      []test.Account
+	contract2     []test.Account
 	approved      []test.Account
 	target        []test.Account
 	receiver      []test.Account
@@ -35,6 +36,7 @@ type testToken struct {
 	ownerKey      string // Private Key
 	senderKey     string // Private Key
 	contractKey   string // Private Key
+	contract2Key  string // Private Key
 	approvedKey   string // Private Key
 	targetKey     string // Private Key
 	receiverKey   string // Private Key
@@ -55,6 +57,7 @@ func (t *testToken) SetupTest() {
 	t.owner = make([]test.Account, 1)
 	t.sender = make([]test.Account, 1)
 	t.contract = make([]test.Account, 1)
+	t.contract2 = make([]test.Account, 1)
 	t.approved = make([]test.Account, 1)
 	t.target = make([]test.Account, 1)
 	t.receiver = make([]test.Account, 1)
@@ -62,6 +65,7 @@ func (t *testToken) SetupTest() {
 	t.ownerKey = t.NewPrivateKey("owner")
 	t.senderKey = t.NewPrivateKey("sender")
 	t.contractKey = t.NewPrivateKey("contract")
+	t.contract2Key = t.NewPrivateKey("contract2")
 	t.approvedKey = t.NewPrivateKey("approved")
 	t.targetKey = t.NewPrivateKey("target")
 	t.receiverKey = t.NewPrivateKey("receiver")
@@ -131,12 +135,13 @@ func (t *testToken) Test01ErrorSenderNotFound() {
 	t.Mint()
 	t.Approve()
 	t.Burn()
-	t.Transfer()
 
-	t.transferFrom.Create().
+	t.transfer.Create().
+		SetAccount(t.senderKey, 1000, t.GenesisCurrency, t.sender, true).
 		SetAccount(t.receiverKey, 1000, t.GenesisCurrency, t.receiver, true).
-		MakeOperation(t.approved[0].Address(), t.approved[0].Priv(), t.contract[0].Address(),
-			t.receiver[0].Address(), t.sender[0].Address(), 1000, t.GenesisCurrency).
+		SetContractAccount(t.sender[0].Address(), t.contract2Key, 1000, t.GenesisCurrency, t.contract2, false).
+		MakeOperation(t.sender[0].Address(), t.sender[0].Priv(), t.contract2[0].Address(),
+			t.receiver[0].Address(), 1000, t.GenesisCurrency).
 		RunPreProcess()
 
 	if assert.NotNil(t.Suite.T(), t.Error()) {
